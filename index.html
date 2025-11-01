@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EverGreen Empire – Turn Your Views Into Royalties</title>
+  <title>EverGreen Empire – Turn Your Views Into Money</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-  <script src="firebase-config.js"></script>
+  
   <style>
     :root {
       --navy: #001f3f;
@@ -168,6 +168,38 @@
       box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
     }
 
+    /* Notification System */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 25px;
+      border-radius: 10px;
+      color: white;
+      font-weight: 500;
+      z-index: 10000;
+      transform: translateX(150%);
+      transition: transform 0.3s ease;
+      max-width: 350px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .notification.show {
+      transform: translateX(0);
+    }
+
+    .notification.success {
+      background: linear-gradient(135deg, #28a745, #20c997);
+    }
+
+    .notification.error {
+      background: linear-gradient(135deg, #dc3545, #e83e8c);
+    }
+
+    .notification.info {
+      background: linear-gradient(135deg, #17a2b8, #6f42c1);
+    }
+
     /* Premium Hero Section */
     .hero {
       text-align: center;
@@ -214,6 +246,39 @@
       font-size: clamp(1.1em, 2.5vw, 1.3em);
       padding: 0 20px;
       font-weight: 400;
+    }
+
+    /* Stats Preview */
+    .stats-preview {
+      display: none;
+      text-align: center;
+      padding: 40px;
+      background: rgba(212, 175, 55, 0.1);
+      border-radius: 15px;
+      margin: 40px auto;
+      max-width: 600px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 2em;
+      font-weight: bold;
+      color: var(--navy);
+    }
+
+    .stat-label {
+      color: #64748b;
+      margin-top: 5px;
     }
 
     /* Premium Buttons */
@@ -728,6 +793,26 @@
         <a href="sign up.html" class="btn main">Start Earning Today</a>
         <a href="learn more.html" class="btn outline">Discover How</a>
       </div>
+      
+      <!-- Stats Preview for Logged-in Users -->
+      <div class="stats-preview" id="statsPreview">
+        <h3>Your Current Stats</h3>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-value" id="previewTotalViews">0</div>
+            <div class="stat-label">Total Views</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="previewRevenue">€0</div>
+            <div class="stat-label">Revenue</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="previewStatus">Active</div>
+            <div class="stat-label">Status</div>
+          </div>
+        </div>
+      </div>
+      
       <div id="dashboardButton" style="display: none; margin-top: 30px;">
         <a href="dashboard.html" class="btn success">Go to Dashboard</a>
         <a href="admin.html" class="btn main" id="adminButton" style="display: none;">Admin Portal</a>
@@ -849,6 +934,25 @@
     <p>© 2025 EverGreen Empire Ltd. All rights reserved.</p>
   </footer>
 
+  <!-- Firebase Configuration -->
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAuSEqhLenwrEz-qrIn1drjAugy1YSkDlI",
+      authDomain: "creators-portal-428c5.firebaseapp.com",
+      projectId: "creators-portal-428c5",
+      storageBucket: "creators-portal-428c5.firebasestorage.app",
+      messagingSenderId: "499280036303",
+      appId: "1:499280036303:web:b4d80d3b7fe1291381d2ba",
+      measurementId: "G-CYWGD80FS5"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+  </script>
+
   <script>
     // Enhanced Notification System
     function showNotification(message, type = 'info') {
@@ -889,7 +993,6 @@
       const signupLink = document.getElementById('signupLink');
       const userInfo = document.getElementById('userInfo');
       const userEmail = document.getElementById('userEmail');
-      const heroButtons = document.getElementById('heroButtons');
       const dashboardButton = document.getElementById('dashboardButton');
       const statsPreview = document.getElementById('statsPreview');
       const adminButton = document.getElementById('adminButton');
@@ -928,9 +1031,9 @@
         
         if (statsDoc.exists) {
           const stats = statsDoc.data();
-          document.getElementById('previewTotalViews').textContent = stats.total_views.toLocaleString();
-          document.getElementById('previewRevenue').textContent = `€${stats.revenue.toLocaleString()}`;
-          document.getElementById('previewStatus').textContent = stats.contract_status;
+          document.getElementById('previewTotalViews').textContent = (stats.total_views || 0).toLocaleString();
+          document.getElementById('previewRevenue').textContent = `€${(stats.available_balance || 0).toLocaleString()}`;
+          document.getElementById('previewStatus').textContent = stats.contract_status || 'Active';
         }
       } catch (error) {
         console.error('Error loading stats:', error);
@@ -986,8 +1089,6 @@
         
         if (user) {
           showNotification('Welcome back to EverGreen Empire!', 'success');
-        } else {
-          showNotification('You have been logged out successfully', 'info');
         }
       });
       
