@@ -34,15 +34,104 @@
     html, body {
       height: 100%;
       background: linear-gradient(135deg, #001f3f 0%, #0a2458 50%, #00152c 100%);
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
     body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      min-height: 100vh;
       padding: 20px;
       position: relative;
+    }
+
+    /* Premium Header */
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+      padding: 18px 6%;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 80px;
+      border-bottom: 1px solid rgba(0, 31, 63, 0.05);
+    }
+
+    .brand {
+      font-family: "Montserrat", sans-serif;
+      font-size: clamp(1.5em, 5vw, 1.9em);
+      font-weight: 900;
+      color: var(--navy);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Enhanced Navigation */
+    nav {
+      display: flex;
+      align-items: center;
+    }
+
+    .menu-icon {
+      display: none;
+      font-size: 1.5em;
+      color: var(--navy);
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 10px;
+      margin-left: auto;
+      transition: all 0.3s ease;
+    }
+
+    .menu-icon:hover {
+      color: var(--gold);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: clamp(15px, 2vw, 25px);
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--navy);
+      font-weight: 500;
+      font-size: 0.95em;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      padding: 8px 16px;
+      border-radius: 8px;
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+      background: rgba(212, 175, 55, 0.08);
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: var(--gold);
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+
+    .nav-links a:hover::after {
+      width: 80%;
     }
 
     /* Background Animation */
@@ -107,6 +196,15 @@
       75% {
         transform: translateY(20px) rotate(270deg);
       }
+    }
+
+    /* Main Content */
+    .main-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 160px);
+      padding: 40px 20px;
     }
 
     /* Signin Container */
@@ -438,26 +536,23 @@
       box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
     }
 
-    /* Footer Links */
-    .signin-footer {
+    /* Security Badge */
+    .security-badge {
       text-align: center;
-      margin-top: 35px;
-      padding-top: 25px;
-      border-top: 1px solid #e2e8f0;
+      margin-top: 25px;
+      padding: 15px;
+      background: rgba(212, 175, 55, 0.05);
+      border-radius: 12px;
+      border: 1px solid rgba(212, 175, 55, 0.2);
     }
 
-    .back-link {
+    .security-text {
       color: #64748b;
-      text-decoration: none;
-      font-size: 0.95em;
-      transition: color 0.3s ease;
-      display: inline-flex;
+      font-size: 0.85em;
+      display: flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
-    }
-
-    .back-link:hover {
-      color: var(--navy);
     }
 
     /* Notification System */
@@ -499,31 +594,93 @@
       font-size: 1.2em;
     }
 
-    /* Security Badge */
-    .security-badge {
+    /* Premium Footer */
+    footer {
       text-align: center;
-      margin-top: 25px;
-      padding: 15px;
-      background: rgba(212, 175, 55, 0.05);
-      border-radius: 12px;
-      border: 1px solid rgba(212, 175, 55, 0.2);
+      background: var(--dark-navy);
+      color: var(--white);
+      padding: 40px 20px;
+      position: relative;
+      overflow: hidden;
+      margin-top: 40px;
     }
 
-    .security-text {
-      color: #64748b;
-      font-size: 0.85em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    footer p {
+      margin: 15px 0;
+      font-size: 1em;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    footer a {
+      color: var(--light-gold);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    footer a:hover {
+      color: var(--white);
+      text-decoration: underline;
     }
 
     /* Enhanced Mobile Responsiveness */
     @media (max-width: 768px) {
-      body {
-        padding: 15px;
-        align-items: flex-start;
-        padding-top: 60px;
+      header {
+        padding: 15px 4%;
+        min-height: 70px;
+      }
+
+      .menu-icon {
+        display: block;
+      }
+
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 85%;
+        height: 100vh;
+        box-shadow: 10px 0 50px rgba(0, 0, 0, 0.1);
+        padding: 100px 30px 40px;
+        z-index: 999;
+        gap: 0;
+      }
+
+      .nav-links.show {
+        display: flex;
+        animation: slideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+      }
+
+      @keyframes slideIn {
+        from { transform: translateX(-100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+
+      .nav-links a {
+        padding: 18px 0;
+        border-bottom: 1px solid rgba(0, 31, 63, 0.05);
+        font-size: 1.1em;
+        width: 100%;
+        border-radius: 0;
+      }
+
+      .main-content {
+        padding: 20px 15px;
+        min-height: calc(100vh - 140px);
       }
 
       .signin-container {
@@ -621,97 +778,120 @@
     <span id="notificationMessage">Notification message</span>
   </div>
 
-  <!-- Signin Container -->
-  <div class="signin-container">
-    <!-- Brand Header -->
-    <div class="brand-header">
-      <div class="brand-logo">EVERGREEN EMPIRE</div>
-      <div class="creator-badge">CREATOR PORTAL</div>
-      <p class="welcome-text">Welcome back, creator! Sign in to access your dashboard</p>
-    </div>
+  <!-- Premium Header -->
+  <header>
+    <button class="menu-icon" onclick="toggleMenu()">☰</button>
+    <div class="brand">EVERGREEN EMPIRE</div>
+    <nav>
+      <div class="nav-links" id="navMenu">
+        <a href="index.html" onclick="closeMenu()">Home</a>
+        <a href="About Us.html" onclick="closeMenu()">About</a>
+        <a href="index.html#music" onclick="closeMenu()">Music Library</a>
+        <a href="sign-in.html" id="loginLink">Login</a>
+        <a href="sign up.html" id="signupLink">Creator Signup</a>
+        <a href="index.html#contact" onclick="closeMenu()">Contact</a>
+      </div>
+    </nav>
+  </header>
 
-    <!-- Signin Form -->
-    <form id="creatorSigninForm">
-      <div class="form-group">
-        <label for="creatorEmail" class="form-label">Email Address</label>
-        <div class="input-group">
-          <input 
-            type="email" 
-            id="creatorEmail" 
-            class="form-input" 
-            placeholder="your.email@example.com"
-            required
-            autocomplete="email"
-          >
-          <span class="input-icon">👤</span>
-        </div>
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Signin Container -->
+    <div class="signin-container">
+      <!-- Brand Header -->
+      <div class="brand-header">
+        <!-- Removed the duplicate EVERGREEN EMPIRE text here -->
+        <div class="creator-badge">CREATOR PORTAL</div>
+        <p class="welcome-text">Welcome back, creator! Sign in to access your dashboard</p>
       </div>
 
-      <div class="form-group">
-        <label for="creatorPassword" class="form-label">Password</label>
-        <div class="input-group">
-          <input 
-            type="password" 
-            id="creatorPassword" 
-            class="form-input" 
-            placeholder="Enter your password"
-            required
-            autocomplete="current-password"
-          >
-          <button type="button" class="password-toggle" id="passwordToggle">👁️</button>
+      <!-- Signin Form -->
+      <form id="creatorSigninForm">
+        <div class="form-group">
+          <label for="creatorEmail" class="form-label">Email Address</label>
+          <div class="input-group">
+            <input 
+              type="email" 
+              id="creatorEmail" 
+              class="form-input" 
+              placeholder="your.email@example.com"
+              required
+              autocomplete="email"
+            >
+            <span class="input-icon">👤</span>
+          </div>
         </div>
+
+        <div class="form-group">
+          <label for="creatorPassword" class="form-label">Password</label>
+          <div class="input-group">
+            <input 
+              type="password" 
+              id="creatorPassword" 
+              class="form-input" 
+              placeholder="Enter your password"
+              required
+              autocomplete="current-password"
+            >
+            <button type="button" class="password-toggle" id="passwordToggle">👁️</button>
+          </div>
+        </div>
+
+        <div class="form-options">
+          <div class="remember-me">
+            <input type="checkbox" id="rememberMe" class="remember-checkbox">
+            <label for="rememberMe" class="remember-label">Remember me</label>
+          </div>
+          <a href="#" class="forgot-password" id="forgotPassword">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="signin-btn" id="signinBtn">
+          <span id="btnText">Sign In to Dashboard</span>
+        </button>
+      </form>
+
+      <!-- Divider -->
+      <div class="divider">
+        <span class="divider-text">OR</span>
       </div>
 
-      <div class="form-options">
-        <div class="remember-me">
-          <input type="checkbox" id="rememberMe" class="remember-checkbox">
-          <label for="rememberMe" class="remember-label">Remember me</label>
-        </div>
-        <a href="#" class="forgot-password" id="forgotPassword">Forgot Password?</a>
-      </div>
-
-      <button type="submit" class="signin-btn" id="signinBtn">
-        <span id="btnText">Sign In to Dashboard</span>
+      <!-- Google Sign In -->
+      <button class="google-btn" id="googleSignInBtn">
+        <svg class="google-icon" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+        Sign in with Google
       </button>
-    </form>
 
-    <!-- Divider -->
-    <div class="divider">
-      <span class="divider-text">OR</span>
-    </div>
-
-    <!-- Google Sign In -->
-    <button class="google-btn" id="googleSignInBtn">
-      <svg class="google-icon" viewBox="0 0 24 24">
-        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-      </svg>
-      Sign in with Google
-    </button>
-
-    <!-- Signup Section -->
-    <div class="signup-section">
-      <p class="signup-text">Don't have an account yet?</p>
-      <a href="sign-up.html" class="signup-btn">Create Creator Account</a>
-    </div>
-
-    <!-- Security Badge -->
-    <div class="security-badge">
-      <div class="security-text">
-        <span>🔒</span>
-        Secured Creator Access
+      <!-- Signup Section -->
+      <div class="signup-section">
+        <p class="signup-text">Don't have an account yet?</p>
+        <a href="sign up.html" class="signup-btn">Create Creator Account</a>
       </div>
-    </div>
 
-    <!-- Footer Links -->
-    <div class="signin-footer">
-      <a href="index.html" class="back-link">
-        ← Back to Main Site
-      </a>
+      <!-- Security Badge -->
+      <div class="security-badge">
+        <div class="security-text">
+          <span>🔒</span>
+          Secured Creator Access
+        </div>
+      </div>
     </div>
   </div>
+
+  <!-- Premium Footer -->
+  <footer id="contact">
+    <p>Contact our dedicated support team: <a href="mailto:support@evergreenempireltd.com">support@evergreenempireltd.com</a></p>
+    <p>
+      <a href="Terms of Service.html">Terms & Conditions</a> | 
+      <a href="Privacy policy.html">Privacy Policy</a> | 
+      <a href="Creator Agreement.html">Creator Agreement</a>
+    </p>
+    <p>© 2025 EverGreen Empire Ltd. All rights reserved.</p>
+  </footer>
 
   <!-- Firebase Configuration -->
   <script>
@@ -745,6 +925,27 @@
     const notification = document.getElementById('notification');
     const notificationMessage = document.getElementById('notificationMessage');
     const notificationIcon = document.getElementById('notificationIcon');
+
+    // Mobile Menu Functions
+    function toggleMenu() {
+      const nav = document.getElementById('navMenu');
+      nav.classList.toggle('show');
+    }
+
+    function closeMenu() {
+      const nav = document.getElementById('navMenu');
+      nav.classList.remove('show');
+    }
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const nav = document.getElementById('navMenu');
+      const menuIcon = document.querySelector('.menu-icon');
+      
+      if (!nav.contains(event.target) && !menuIcon.contains(event.target) && nav.classList.contains('show')) {
+        closeMenu();
+      }
+    });
 
     // Enhanced Notification System
     function showNotification(message, type = 'info') {
@@ -1047,4 +1248,4 @@
     });
   </script>
 </body>
-</html>
+                                       </html>
