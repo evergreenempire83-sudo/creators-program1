@@ -9,6 +9,8 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
     :root {
@@ -682,6 +684,7 @@
       border-left: 4px solid var(--creator);
       cursor: pointer;
       transition: all 0.3s ease;
+      position: relative;
     }
 
     .notification-item:hover {
@@ -709,6 +712,46 @@
     .notification-time {
       font-size: 0.8em;
       color: #94a3b8;
+    }
+
+    .notification-actions {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      gap: 5px;
+    }
+
+    .notification-action {
+      background: none;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .notification-action:hover {
+      background: rgba(0, 0, 0, 0.05);
+      color: var(--navy);
+    }
+
+    /* Clear All Button */
+    .clear-all-btn {
+      background: var(--danger);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85em;
+      transition: all 0.3s ease;
+    }
+
+    .clear-all-btn:hover {
+      background: #c82333;
+      transform: translateY(-2px);
     }
 
     /* Notification System */
@@ -961,6 +1004,68 @@
       font-weight: 600;
     }
 
+    /* Settings Dropdown */
+    .settings-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .settings-btn {
+      background: none;
+      border: none;
+      color: var(--navy);
+      font-size: 1.2em;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .settings-btn:hover {
+      background: rgba(139, 92, 246, 0.1);
+    }
+
+    .settings-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background: white;
+      min-width: 200px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      border-radius: 10px;
+      z-index: 1001;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+
+    .settings-content.show {
+      display: block;
+    }
+
+    .settings-content a {
+      color: var(--navy);
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      transition: all 0.3s ease;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .settings-content a:last-child {
+      border-bottom: none;
+    }
+
+    .settings-content a:hover {
+      background: rgba(139, 92, 246, 0.08);
+      color: var(--creator);
+    }
+
+    .settings-content a i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+
     /* Mobile Responsiveness */
     @media (max-width: 768px) {
       header {
@@ -1052,6 +1157,15 @@
         padding: 10px 8px;
         font-size: 0.85em;
       }
+
+      .settings-content {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        max-width: 300px;
+      }
     }
 
     @media (max-width: 480px) {
@@ -1086,7 +1200,12 @@
   <div class="notifications-panel" id="notificationsPanel">
     <div class="notifications-header">
       <h3 class="notifications-title">Notifications</h3>
-      <button class="close-modal" onclick="closeNotifications()"></button>
+      <div>
+        <button class="clear-all-btn" onclick="clearAllNotifications()">
+          <i class="fas fa-trash"></i> Clear All
+        </button>
+        <button class="close-modal" onclick="closeNotifications()"><i class="fas fa-times"></i></button>
+      </div>
     </div>
     <div id="notificationsList">
       <!-- Notifications will be populated here -->
@@ -1098,14 +1217,14 @@
     <div class="modal-content">
       <div class="modal-header">
         <h3 class="modal-title">Request Withdrawal</h3>
-        <button class="close-modal" onclick="closeModal('withdrawalModal')"></button>
+        <button class="close-modal" onclick="closeModal('withdrawalModal')"><i class="fas fa-times"></i></button>
       </div>
       <div class="form-group">
         <label class="form-label">Available Balance</label>
-        <div class="balance-display" id="modalBalance">0.00</div>
+        <div class="balance-display" id="modalBalance">£0.00</div>
       </div>
       <div class="form-group">
-        <label class="form-label">Withdrawal Amount ()</label>
+        <label class="form-label">Withdrawal Amount (£)</label>
         <input type="number" class="form-input" id="withdrawalAmount" placeholder="Enter amount" min="10" step="0.01">
       </div>
       <div class="form-group">
@@ -1124,7 +1243,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h3 class="modal-title">PayPal Settings</h3>
-        <button class="close-modal" onclick="closeModal('paypalModal')"></button>
+        <button class="close-modal" onclick="closeModal('paypalModal')"><i class="fas fa-times"></i></button>
       </div>
       <div class="form-group">
         <label class="form-label">PayPal Email</label>
@@ -1146,7 +1265,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h3 class="modal-title">Add YouTube Channel</h3>
-        <button class="close-modal" onclick="closeModal('youtubeModal')"></button>
+        <button class="close-modal" onclick="closeModal('youtubeModal')"><i class="fas fa-times"></i></button>
       </div>
       <div class="form-group">
         <label class="form-label">YouTube Channel URL</label>
@@ -1162,27 +1281,87 @@
       <div class="modal-actions">
         <button class="btn outline" onclick="closeModal('youtubeModal')">Cancel</button>
         <button class="btn youtube" onclick="saveYouTubeChannel()">
-          <span></span> Save Channel
+          <i class="fab fa-youtube"></i> Save Channel
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Settings Modal -->
+  <div class="modal" id="profileModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Profile Settings</h3>
+        <button class="close-modal" onclick="closeModal('profileModal')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" class="form-input" id="profileName" placeholder="Your full name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" class="form-input" id="profileEmail" placeholder="Your email" readonly>
+      </div>
+      <div class="modal-actions">
+        <button class="btn outline" onclick="closeModal('profileModal')">Cancel</button>
+        <button class="btn main" onclick="updateProfile()">Update Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Password Reset Modal -->
+  <div class="modal" id="passwordModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Change Password</h3>
+        <button class="close-modal" onclick="closeModal('passwordModal')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Current Password</label>
+        <input type="password" class="form-input" id="currentPassword" placeholder="Your current password">
+      </div>
+      <div class="form-group">
+        <label class="form-label">New Password</label>
+        <input type="password" class="form-input" id="newPassword" placeholder="New password">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirm New Password</label>
+        <input type="password" class="form-input" id="confirmPassword" placeholder="Confirm new password">
+      </div>
+      <div class="modal-actions">
+        <button class="btn outline" onclick="closeModal('passwordModal')">Cancel</button>
+        <button class="btn main" onclick="updatePassword()">Change Password</button>
       </div>
     </div>
   </div>
 
   <!-- Header -->
   <header>
-    <button class="menu-icon" onclick="toggleMenu()"></button>
+    <button class="menu-icon" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
     <div class="brand">EVERGREEN EMPIRE</div>
     <nav>
       <div class="nav-links" id="navMenu">
         <a href="#" onclick="closeMenu()">Dashboard</a>
         <a href="#withdrawal-history" onclick="closeMenu()">Withdrawals</a>
+        
+        <!-- Notification Bell - Now visible outside dropdown -->
         <div class="notification-bell" onclick="toggleNotifications()">
-          <span></span>
+          <i class="fas fa-bell"></i>
           <span class="notification-badge" id="notificationCount" style="display: none;">0</span>
+        </div>
+        
+        <div class="settings-dropdown">
+          <button class="settings-btn" onclick="toggleSettings()">
+            <i class="fas fa-cog"></i>
+          </button>
+          <div class="settings-content" id="settingsDropdown">
+            <a href="#" onclick="openModal('profileModal')"><i class="fas fa-user"></i> Profile Settings</a>
+            <a href="#" onclick="openModal('passwordModal')"><i class="fas fa-key"></i> Change Password</a>
+            <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </div>
         </div>
         <div class="user-info" id="userInfo" style="display: none;">
           <span class="user-email" id="userEmail"></span>
-          <button class="logout-btn" onclick="logout()">Logout</button>
         </div>
       </div>
     </nav>
@@ -1201,7 +1380,7 @@
     <div id="dashboardContent" style="display: none;">
       <!-- Index Help Banner -->
       <div class="index-help" id="indexHelp" style="display: none;">
-        <h3> Database Index Required</h3>
+        <h3><i class="fas fa-database"></i> Database Index Required</h3>
         <p>We need to create a database index for optimal performance.</p>
         <p><a href="https://console.firebase.google.com/v1/r/project/creators-portal-428c5/firestore/indexes?create_composite=Cllwcm9qZWN0cy9jcmVhdG9ycy1wb3J0YWwtNDI4YzUvZGF0YWJhc2VzLyhkZWZhdWx0KS9jb2xsZWN0aW9uR3JvdXBzL3dpdGhkcmF3YWxzL2luZGV4ZXMvXxABGgoKBnVzZXJJZBABGg0KCXRpbWVzdGFtcBACGgwKCF9fbmFtZV9fEAI" target="_blank">Click here to create the index automatically</a></p>
         <p><small>This is a one-time setup. The dashboard will work better once the index is created.</small></p>
@@ -1211,9 +1390,9 @@
       <div class="dashboard-header">
         <h1 class="dashboard-title">Creator Dashboard</h1>
         <div class="quick-actions">
-          <button class="btn success" onclick="refreshStats()">Refresh Stats</button>
-          <button class="btn main" onclick="openModal('withdrawalModal')">Withdraw Funds</button>
-          <button class="btn outline" onclick="openModal('paypalModal')">PayPal Settings</button>
+          <button class="btn success" onclick="refreshStats()"><i class="fas fa-sync-alt"></i> Refresh Stats</button>
+          <button class="btn main" onclick="openModal('withdrawalModal')"><i class="fas fa-money-bill-wave"></i> Withdraw Funds</button>
+          <button class="btn outline" onclick="openModal('paypalModal')"><i class="fab fa-paypal"></i> PayPal Settings</button>
         </div>
       </div>
 
@@ -1230,10 +1409,10 @@
         <div style="margin: 20px 0;">
           <a href="https://console.firebase.google.com/v1/r/project/creators-portal-428c5/firestore/indexes?create_composite=Cllwcm9qZWN0cy9jcmVhdG9ycy1wb3J0YWwtNDI4YzUvZGF0YWJhc2VzLyhkZWZhdWx0KS9jb2xsZWN0aW9uR3JvdXBzL3dpdGhkcmF3YWxzL2luZGV4ZXMvXxABGgoKBnVzZXJJZBABGg0KCXRpbWVzdGFtcBACGgwKCF9fbmFtZV9fEAI" 
              target="_blank" class="btn success" style="display: inline-block; margin: 10px;">
-             Create Index Automatically
+            <i class="fas fa-database"></i> Create Index Automatically
           </a>
           <button class="btn outline" onclick="initializeDashboard()" style="margin: 10px;">
-             Retry Loading
+            <i class="fas fa-redo"></i> Retry Loading
           </button>
         </div>
         <p><small>This is a one-time setup. The index may take 2-5 minutes to build.</small></p>
@@ -1249,15 +1428,15 @@
           </div>
           <div id="youtubeConnected" style="display: none;">
             <div class="youtube-link-display">
-              <span class="youtube-icon"></span>
+              <span class="youtube-icon"><i class="fab fa-youtube"></i></span>
               <span class="youtube-url" id="currentYouTubeUrl">No channel connected</span>
             </div>
             <p style="margin-bottom: 20px; color: #64748b;">
               Your YouTube channel is connected. Admins can see your channel for verification and analytics.
             </p>
             <div class="youtube-actions">
-              <button class="btn outline" onclick="openModal('youtubeModal')">Change Channel</button>
-              <button class="btn youtube" onclick="visitYouTubeChannel()">Visit Channel</button>
+              <button class="btn outline" onclick="openModal('youtubeModal')"><i class="fas fa-edit"></i> Change Channel</button>
+              <button class="btn youtube" onclick="visitYouTubeChannel()"><i class="fab fa-youtube"></i> Visit Channel</button>
             </div>
           </div>
           <div id="youtubeNotConnected">
@@ -1265,7 +1444,7 @@
               Connect your YouTube channel to start earning royalties.
             </p>
             <button class="btn youtube" onclick="openModal('youtubeModal')">
-              <span></span> Connect YouTube Channel
+              <i class="fab fa-youtube"></i> Connect YouTube Channel
             </button>
           </div>
         </div>
@@ -1275,17 +1454,17 @@
           <div class="stat-card">
             <div class="stat-value" id="totalViews">0</div>
             <div class="stat-label">Total Views</div>
-            <div class="stat-change positive">Live Updates</div>
+            <div class="stat-change positive"><i class="fas fa-arrow-up"></i> Live Updates</div>
           </div>
           <div class="stat-card">
             <div class="stat-value" id="monetizedViews">0</div>
             <div class="stat-label">Monetized Views</div>
-            <div class="stat-change positive">Live Updates</div>
+            <div class="stat-change positive"><i class="fas fa-arrow-up"></i> Live Updates</div>
           </div>
           <div class="stat-card">
-            <div class="stat-value" id="availableBalance">0.00</div>
+            <div class="stat-value" id="availableBalance">£0.00</div>
             <div class="stat-label">Available Balance</div>
-            <div class="stat-change positive">Ready to withdraw</div>
+            <div class="stat-change positive"><i class="fas fa-check-circle"></i> Ready to withdraw</div>
           </div>
         </div>
 
@@ -1319,12 +1498,12 @@
         <div class="withdrawal-section">
           <div class="withdrawal-header">
             <h3 class="section-title">Withdrawal</h3>
-            <div class="balance-display" id="withdrawalBalance">0.00</div>
+            <div class="balance-display" id="withdrawalBalance">£0.00</div>
           </div>
-          <p style="margin-bottom: 20px; color: #64748b;">Request a withdrawal of your available balance to your PayPal account. Minimum withdrawal amount is 10.</p>
+          <p style="margin-bottom: 20px; color: #64748b;">Request a withdrawal of your available balance to your PayPal account. Minimum withdrawal amount is £10.</p>
           <div class="withdrawal-actions">
-            <button class="btn success" onclick="openModal('withdrawalModal')">Request Withdrawal</button>
-            <button class="btn outline" onclick="scrollToWithdrawalHistory()">View History</button>
+            <button class="btn success" onclick="openModal('withdrawalModal')"><i class="fas fa-money-bill-wave"></i> Request Withdrawal</button>
+            <button class="btn outline" onclick="scrollToWithdrawalHistory()"><i class="fas fa-history"></i> View History</button>
           </div>
         </div>
 
@@ -1338,7 +1517,7 @@
             <div class="paypal-status not-connected" id="paypalStatus">Not Connected</div>
           </div>
           <p style="margin-bottom: 20px; color: #64748b;">Connect your PayPal account to receive payments.</p>
-          <button class="btn main" onclick="openModal('paypalModal')">Connect PayPal</button>
+          <button class="btn main" onclick="openModal('paypalModal')"><i class="fab fa-paypal"></i> Connect PayPal</button>
         </div>
 
         <!-- Withdrawal History Section -->
@@ -1468,9 +1647,27 @@
       nav.classList.remove('show');
     }
 
+    // Settings Dropdown
+    function toggleSettings() {
+      const dropdown = document.getElementById('settingsDropdown');
+      dropdown.classList.toggle('show');
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+      const dropdown = document.getElementById('settingsDropdown');
+      const settingsBtn = document.querySelector('.settings-btn');
+      
+      if (!settingsBtn.contains(event.target) && !dropdown.contains(event.target)) {
+        dropdown.classList.remove('show');
+      }
+    });
+
     // Modal Functions
     function openModal(modalId) {
       document.getElementById(modalId).classList.add('active');
+      // Close settings dropdown when opening a modal
+      document.getElementById('settingsDropdown').classList.remove('show');
     }
 
     function closeModal(modalId) {
@@ -1485,6 +1682,41 @@
 
     function closeNotifications() {
       document.getElementById('notificationsPanel').classList.remove('active');
+    }
+
+    // Clear All Notifications
+    async function clearAllNotifications() {
+      const user = auth.currentUser;
+      if (!user) return;
+      
+      try {
+        // Get all notifications for the user
+        const snapshot = await db.collection('notifications')
+          .where('userId', '==', user.uid)
+          .get();
+        
+        // Delete each notification
+        const deletePromises = [];
+        snapshot.forEach(doc => {
+          deletePromises.push(db.collection('notifications').doc(doc.id).delete());
+        });
+        
+        await Promise.all(deletePromises);
+        showNotification('All notifications cleared', 'success');
+        
+      } catch (error) {
+        showDetailedError(error, 'Clearing notifications');
+      }
+    }
+
+    // Delete Single Notification
+    async function deleteNotification(notificationId) {
+      try {
+        await db.collection('notifications').doc(notificationId).delete();
+        showNotification('Notification deleted', 'success');
+      } catch (error) {
+        showDetailedError(error, 'Deleting notification');
+      }
     }
 
     // UI State Management
@@ -1734,6 +1966,12 @@
 
     // Update User Display
     function updateUserDisplay(data) {
+      // User Info
+      document.getElementById('userEmail').textContent = data.email || auth.currentUser.email;
+      document.getElementById('profileEmail').value = data.email || auth.currentUser.email;
+      document.getElementById('profileName').value = data.name || '';
+      document.getElementById('userInfo').style.display = 'flex';
+      
       // PayPal Email
       if (data.paypalEmail) {
         document.getElementById('currentPayPalEmail').textContent = data.paypalEmail;
@@ -1780,9 +2018,9 @@
     function updateStatsDisplay(stats) {
       document.getElementById('totalViews').textContent = stats.totalViews?.toLocaleString() || '0';
       document.getElementById('monetizedViews').textContent = stats.monetizedViews?.toLocaleString() || '0';
-      document.getElementById('availableBalance').textContent = `${stats.availableBalance?.toFixed(2) || '0.00'}`;
-      document.getElementById('withdrawalBalance').textContent = `${stats.availableBalance?.toFixed(2) || '0.00'}`;
-      document.getElementById('modalBalance').textContent = `${stats.availableBalance?.toFixed(2) || '0.00'}`;
+      document.getElementById('availableBalance').textContent = `£${stats.availableBalance?.toFixed(2) || '0.00'}`;
+      document.getElementById('withdrawalBalance').textContent = `£${stats.availableBalance?.toFixed(2) || '0.00'}`;
+      document.getElementById('modalBalance').textContent = `£${stats.availableBalance?.toFixed(2) || '0.00'}`;
     }
 
     // Update Notifications Display
@@ -1805,11 +2043,20 @@
         const notificationElement = document.createElement('div');
         notificationElement.className = `notification-item ${notification.read ? '' : 'unread'}`;
         notificationElement.innerHTML = `
+          <div class="notification-actions">
+            <button class="notification-action" onclick="deleteNotification('${notification.id}')" title="Delete">
+              <i class="fas fa-trash"></i>
+            </button>
+            ${!notification.read ? `
+              <button class="notification-action" onclick="markAsRead('${notification.id}')" title="Mark as read">
+                <i class="fas fa-check"></i>
+              </button>
+            ` : ''}
+          </div>
           <div class="notification-title">${notification.title || 'Notification'}</div>
           <div class="notification-message">${notification.message || 'No message'}</div>
           <div class="notification-time">${formatTime(notification.timestamp?.toDate())}</div>
         `;
-        notificationElement.addEventListener('click', () => markAsRead(notification.id));
         notificationsList.appendChild(notificationElement);
       });
     }
@@ -1822,7 +2069,7 @@
         tableBody.innerHTML = `
           <tr>
             <td colspan="6" class="empty-state">
-              <div class="empty-state-icon"></div>
+              <div class="empty-state-icon"><i class="fas fa-history"></i></div>
               <p>No withdrawal history found</p>
               <p style="font-size: 0.9em; margin-top: 10px;">Your withdrawal requests will appear here</p>
             </td>
@@ -1864,7 +2111,7 @@
         
         row.innerHTML = `
           <td>${requestDate}</td>
-          <td><strong>${withdrawal.amount?.toFixed(2) || '0.00'}</strong></td>
+          <td><strong>£${withdrawal.amount?.toFixed(2) || '0.00'}</strong></td>
           <td>${withdrawal.paypalEmail || 'N/A'}</td>
           <td><span class="status-badge ${statusClass}">${statusText}</span></td>
           <td>${processedDate}</td>
@@ -1910,7 +2157,7 @@
         tableBody.innerHTML = `
           <tr>
             <td colspan="6" class="empty-state">
-              <div class="empty-state-icon"></div>
+              <div class="empty-state-icon"><i class="fas fa-filter"></i></div>
               <p>No withdrawals match your filters</p>
               <button class="btn outline" onclick="resetFilters()" style="margin-top: 10px;">
                 Reset Filters
@@ -1951,7 +2198,7 @@
         
         row.innerHTML = `
           <td>${requestDate}</td>
-          <td><strong>${withdrawal.amount?.toFixed(2) || '0.00'}</strong></td>
+          <td><strong>£${withdrawal.amount?.toFixed(2) || '0.00'}</strong></td>
           <td>${withdrawal.paypalEmail || 'N/A'}</td>
           <td><span class="status-badge ${statusClass}">${statusText}</span></td>
           <td>${processedDate}</td>
@@ -2048,7 +2295,7 @@
       const paypalEmail = document.getElementById('paypalEmail').value;
       
       if (!amount || amount < 10) {
-        showNotification('Minimum withdrawal amount is 10', 'error');
+        showNotification('Minimum withdrawal amount is £10', 'error');
         return;
       }
       
@@ -2125,6 +2372,79 @@
       }
     }
 
+    // Profile Settings
+    async function updateProfile() {
+      const name = document.getElementById('profileName').value;
+      
+      if (!name) {
+        showNotification('Please enter your name', 'error');
+        return;
+      }
+      
+      const user = auth.currentUser;
+      
+      try {
+        await db.collection('users').doc(user.uid).set({
+          name: name,
+          lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+        
+        showNotification('Profile updated successfully', 'success');
+        closeModal('profileModal');
+        
+      } catch (error) {
+        showDetailedError(error, 'Updating profile');
+      }
+    }
+
+    // Password Update
+    async function updatePassword() {
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      if (!currentPassword || !newPassword || !confirmPassword) {
+        showNotification('Please fill in all password fields', 'error');
+        return;
+      }
+      
+      if (newPassword !== confirmPassword) {
+        showNotification('New passwords do not match', 'error');
+        return;
+      }
+      
+      if (newPassword.length < 6) {
+        showNotification('Password must be at least 6 characters', 'error');
+        return;
+      }
+      
+      const user = auth.currentUser;
+      const credential = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword);
+      
+      try {
+        // Re-authenticate user
+        await user.reauthenticateWithCredential(credential);
+        
+        // Update password
+        await user.updatePassword(newPassword);
+        
+        showNotification('Password updated successfully', 'success');
+        closeModal('passwordModal');
+        
+        // Clear password fields
+        document.getElementById('currentPassword').value = '';
+        document.getElementById('newPassword').value = '';
+        document.getElementById('confirmPassword').value = '';
+        
+      } catch (error) {
+        if (error.code === 'auth/wrong-password') {
+          showNotification('Current password is incorrect', 'error');
+        } else {
+          showDetailedError(error, 'Updating password');
+        }
+      }
+    }
+
     // Utility Functions
     function isValidEmail(email) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -2177,6 +2497,22 @@
 
     function redirectToLogin() {
       window.location.href = 'sign-in.html';
+    }
+
+    // Security Check - Redirect if not coming from sign-in
+    function checkReferrer() {
+      const referrer = document.referrer;
+      const currentUrl = window.location.href;
+      
+      // If directly accessing the dashboard without coming from sign-in
+      if (!referrer.includes('sign-in.html') && !currentUrl.includes('sign-in.html')) {
+        // Check if user is authenticated
+        auth.onAuthStateChanged((user) => {
+          if (!user) {
+            window.location.href = 'sign-in.html';
+          }
+        });
+      }
     }
 
     // Initialize Dashboard
@@ -2243,9 +2579,9 @@
     // Initialize the dashboard when page loads
     document.addEventListener('DOMContentLoaded', function() {
       console.log('Creator Dashboard initializing...');
+      checkReferrer();
       initializeDashboard();
     });
   </script>
 </body>
-
-</html>
+  </html>
