@@ -1102,10 +1102,10 @@
       </div>
       <div class="form-group">
         <label class="form-label">Available Balance</label>
-        <div class="balance-display" id="modalBalance">€0.00</div>
+        <div class="balance-display" id="modalBalance">Â€0.00</div>
       </div>
       <div class="form-group">
-        <label class="form-label">Withdrawal Amount (€)</label>
+        <label class="form-label">Withdrawal Amount (Â€)</label>
         <input type="number" class="form-input" id="withdrawalAmount" placeholder="Enter amount" min="10" step="0.01">
       </div>
       <div class="form-group">
@@ -1283,7 +1283,7 @@
             <div class="stat-change positive">Live Updates</div>
           </div>
           <div class="stat-card">
-            <div class="stat-value" id="availableBalance">€0.00</div>
+            <div class="stat-value" id="availableBalance">Â€0.00</div>
             <div class="stat-label">Available Balance</div>
             <div class="stat-change positive">Ready to withdraw</div>
           </div>
@@ -1319,9 +1319,9 @@
         <div class="withdrawal-section">
           <div class="withdrawal-header">
             <h3 class="section-title">Withdrawal</h3>
-            <div class="balance-display" id="withdrawalBalance">€0.00</div>
+            <div class="balance-display" id="withdrawalBalance">Â€0.00</div>
           </div>
-          <p style="margin-bottom: 20px; color: #64748b;">Request a withdrawal of your available balance to your PayPal account. Minimum withdrawal amount is €10.</p>
+          <p style="margin-bottom: 20px; color: #64748b;">Request a withdrawal of your available balance to your PayPal account. Minimum withdrawal amount is Â€10.</p>
           <div class="withdrawal-actions">
             <button class="btn success" onclick="openModal('withdrawalModal')">Request Withdrawal</button>
             <button class="btn outline" onclick="scrollToWithdrawalHistory()">View History</button>
@@ -1780,9 +1780,9 @@
     function updateStatsDisplay(stats) {
       document.getElementById('totalViews').textContent = stats.totalViews?.toLocaleString() || '0';
       document.getElementById('monetizedViews').textContent = stats.monetizedViews?.toLocaleString() || '0';
-      document.getElementById('availableBalance').textContent = `€${stats.availableBalance?.toFixed(2) || '0.00'}`;
-      document.getElementById('withdrawalBalance').textContent = `€${stats.availableBalance?.toFixed(2) || '0.00'}`;
-      document.getElementById('modalBalance').textContent = `€${stats.availableBalance?.toFixed(2) || '0.00'}`;
+      document.getElementById('availableBalance').textContent = `Â€${stats.availableBalance?.toFixed(2) || '0.00'}`;
+      document.getElementById('withdrawalBalance').textContent = `Â€${stats.availableBalance?.toFixed(2) || '0.00'}`;
+      document.getElementById('modalBalance').textContent = `Â€${stats.availableBalance?.toFixed(2) || '0.00'}`;
     }
 
     // Update Notifications Display
@@ -1864,7 +1864,7 @@
         
         row.innerHTML = `
           <td>${requestDate}</td>
-          <td><strong>€${withdrawal.amount?.toFixed(2) || '0.00'}</strong></td>
+          <td><strong>Â€${withdrawal.amount?.toFixed(2) || '0.00'}</strong></td>
           <td>${withdrawal.paypalEmail || 'N/A'}</td>
           <td><span class="status-badge ${statusClass}">${statusText}</span></td>
           <td>${processedDate}</td>
@@ -1951,7 +1951,7 @@
         
         row.innerHTML = `
           <td>${requestDate}</td>
-          <td><strong>€${withdrawal.amount?.toFixed(2) || '0.00'}</strong></td>
+          <td><strong>Â€${withdrawal.amount?.toFixed(2) || '0.00'}</strong></td>
           <td>${withdrawal.paypalEmail || 'N/A'}</td>
           <td><span class="status-badge ${statusClass}">${statusText}</span></td>
           <td>${processedDate}</td>
@@ -2048,7 +2048,7 @@
       const paypalEmail = document.getElementById('paypalEmail').value;
       
       if (!amount || amount < 10) {
-        showNotification('Minimum withdrawal amount is €10', 'error');
+        showNotification('Minimum withdrawal amount is Â€10', 'error');
         return;
       }
       
@@ -2247,4 +2247,5 @@
     });
   </script>
 </body>
+
 </html>
