@@ -1,0 +1,2250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creator Dashboard - EverGreen Empire</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  
+  <style>
+    :root {
+      --navy: #001f3f;
+      --dark-navy: #00152c;
+      --gold: #d4af37;
+      --light-gold: #e6d4a8;
+      --white: #ffffff;
+      --light: #f8fafc;
+      --shadow: rgba(0, 31, 63, 0.1);
+      --gradient: linear-gradient(135deg, var(--navy) 0%, #0a2458 100%);
+      --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+      --creator: #8B5CF6;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: var(--white);
+      color: var(--navy);
+      overflow-x: hidden;
+      line-height: 1.7;
+    }
+
+    /* Header */
+    header {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+      padding: 18px 5%;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 80px;
+      border-bottom: 1px solid rgba(0, 31, 63, 0.05);
+    }
+
+    .brand {
+      font-family: "Montserrat", sans-serif;
+      font-size: clamp(1.5em, 5vw, 1.9em);
+      font-weight: 900;
+      color: var(--navy);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--creator) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Navigation */
+    nav {
+      display: flex;
+      align-items: center;
+    }
+
+    .menu-icon {
+      display: none;
+      font-size: 1.5em;
+      color: var(--navy);
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 10px;
+      margin-left: auto;
+      transition: all 0.3s ease;
+      z-index: 1001;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: clamp(15px, 2vw, 25px);
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--navy);
+      font-weight: 500;
+      font-size: 0.95em;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      padding: 8px 16px;
+      border-radius: 8px;
+    }
+
+    .nav-links a:hover {
+      color: var(--creator);
+      background: rgba(139, 92, 246, 0.08);
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-left: 15px;
+      padding-left: 15px;
+      border-left: 1px solid rgba(0, 31, 63, 0.1);
+    }
+
+    .user-email {
+      font-size: 0.85em;
+      color: var(--navy);
+      background: rgba(139, 92, 246, 0.1);
+      padding: 8px 16px;
+      border-radius: 20px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 160px;
+      font-weight: 500;
+    }
+
+    .logout-btn {
+      background: linear-gradient(135deg, var(--creator) 0%, #7C3AED 100%);
+      color: var(--white);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85em;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+    }
+
+    .logout-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+    }
+
+    /* Notification Bell */
+    .notification-bell {
+      position: relative;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .notification-bell:hover {
+      background: rgba(139, 92, 246, 0.1);
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      background: var(--danger);
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 0.7em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    /* Dashboard Layout */
+    .dashboard {
+      padding: 40px 5%;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .dashboard-title {
+      font-family: "Montserrat", sans-serif;
+      font-size: clamp(2em, 5vw, 2.5em);
+      color: var(--navy);
+      font-weight: 800;
+    }
+
+    .quick-actions {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: var(--card-shadow);
+      transition: all 0.4s ease;
+      border: 1px solid rgba(0, 31, 63, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--creator), var(--navy));
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--hover-shadow);
+    }
+
+    .stat-value {
+      font-size: 2.5em;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 10px;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 1em;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .stat-change {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 0.9em;
+      font-weight: 500;
+    }
+
+    .stat-change.positive {
+      color: var(--success);
+    }
+
+    .stat-change.negative {
+      color: var(--danger);
+    }
+
+    /* YouTube Channel Section */
+    .youtube-section {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 40px;
+      border: 1px solid rgba(0, 31, 63, 0.05);
+    }
+
+    .youtube-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .youtube-status {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85em;
+      font-weight: 600;
+    }
+
+    .youtube-status.connected {
+      background: rgba(40, 167, 69, 0.1);
+      color: var(--success);
+    }
+
+    .youtube-status.not-connected {
+      background: rgba(108, 117, 125, 0.1);
+      color: #6c757d;
+    }
+
+    .youtube-link-display {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding: 15px;
+      background: #f8fafc;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .youtube-icon {
+      color: #FF0000;
+      font-size: 1.5em;
+    }
+
+    .youtube-url {
+      flex: 1;
+      color: var(--navy);
+      font-weight: 500;
+      word-break: break-all;
+    }
+
+    .youtube-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Contract Status */
+    .contract-status {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 40px;
+      border: 1px solid rgba(0, 31, 63, 0.05);
+    }
+
+    .status-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .status-title {
+      font-size: 1.5em;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .status-badge {
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9em;
+    }
+
+    .status-badge.active {
+      background: rgba(40, 167, 69, 0.1);
+      color: var(--success);
+    }
+
+    .status-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .status-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .status-label {
+      font-size: 0.9em;
+      color: #64748b;
+      margin-bottom: 5px;
+    }
+
+    .status-value {
+      font-size: 1.1em;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    /* Withdrawal Section */
+    .withdrawal-section {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 40px;
+      border: 1px solid rgba(0, 31, 63, 0.05);
+    }
+
+    .withdrawal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .section-title {
+      font-size: 1.5em;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .balance-display {
+      font-size: 2em;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 20px;
+    }
+
+    .withdrawal-actions {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    /* PayPal Integration */
+    .paypal-section {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 40px;
+      border: 1px solid rgba(0, 31, 63, 0.05);
+    }
+
+    .paypal-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .paypal-email {
+      font-size: 1.1em;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .paypal-status {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85em;
+      font-weight: 600;
+    }
+
+    .paypal-status.connected {
+      background: rgba(40, 167, 69, 0.1);
+      color: var(--success);
+    }
+
+    .paypal-status.not-connected {
+      background: rgba(108, 117, 125, 0.1);
+      color: #6c757d;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.4s ease;
+      cursor: pointer;
+      border: none;
+      font-size: 0.95em;
+      text-align: center;
+      min-width: 140px;
+    }
+
+    .btn.main {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--dark-navy) 100%);
+      color: var(--white);
+      box-shadow: 0 8px 30px rgba(0, 31, 63, 0.2);
+    }
+
+    .btn.main:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0, 31, 63, 0.3);
+    }
+
+    .btn.success {
+      background: linear-gradient(135deg, var(--success) 0%, #218838 100%);
+      color: white;
+      box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+    }
+
+    .btn.success:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(40, 167, 69, 0.4);
+    }
+
+    .btn.outline {
+      border: 2px solid var(--navy);
+      color: var(--navy);
+      background: transparent;
+    }
+
+    .btn.outline:hover {
+      background: var(--navy);
+      color: var(--white);
+      transform: translateY(-3px);
+    }
+
+    .btn.youtube {
+      background: #FF0000;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn.youtube:hover {
+      background: #CC0000;
+      transform: translateY(-3px);
+    }
+
+    /* Modals */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+      position: relative;
+      animation: modalSlideIn 0.3s ease;
+    }
+
+    @keyframes modalSlideIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .modal-title {
+      font-size: 1.5em;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.5em;
+      cursor: pointer;
+      color: #64748b;
+      transition: color 0.3s ease;
+    }
+
+    .close-modal:hover {
+      color: var(--navy);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--navy);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 1em;
+      transition: all 0.3s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--creator);
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    /* Notifications Panel */
+    .notifications-panel {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 100%;
+      max-width: 380px;
+      height: 100vh;
+      background: white;
+      box-shadow: -5px 0 30px rgba(0, 0, 0, 0.1);
+      z-index: 1999;
+      transition: right 0.3s ease;
+      padding: 80px 25px 25px;
+      overflow-y: auto;
+    }
+
+    .notifications-panel.active {
+      right: 0;
+    }
+
+    .notifications-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .notifications-title {
+      font-size: 1.3em;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .notification-item {
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      background: #f8fafc;
+      border-left: 4px solid var(--creator);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .notification-item:hover {
+      background: rgba(139, 92, 246, 0.05);
+      transform: translateX(5px);
+    }
+
+    .notification-item.unread {
+      background: rgba(139, 92, 246, 0.08);
+      border-left-color: var(--navy);
+    }
+
+    .notification-title {
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: var(--navy);
+    }
+
+    .notification-message {
+      font-size: 0.9em;
+      color: #64748b;
+      margin-bottom: 10px;
+    }
+
+    .notification-time {
+      font-size: 0.8em;
+      color: #94a3b8;
+    }
+
+    /* Notification System */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 25px;
+      border-radius: 10px;
+      color: white;
+      font-weight: 500;
+      z-index: 10000;
+      transform: translateX(150%);
+      transition: transform 0.3s ease;
+      max-width: 350px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .notification.show {
+      transform: translateX(0);
+    }
+
+    .notification.success {
+      background: linear-gradient(135deg, var(--success), #20c997);
+    }
+
+    .notification.error {
+      background: linear-gradient(135deg, var(--danger), #e83e8c);
+    }
+
+    .notification.info {
+      background: linear-gradient(135deg, #17a2b8, #6f42c1);
+    }
+
+    /* Loading States */
+    .loading {
+      opacity: 0.7;
+      pointer-events: none;
+      position: relative;
+    }
+
+    .loading::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 20px;
+      height: 20px;
+      margin: -10px 0 0 -10px;
+      border: 2px solid var(--creator);
+      border-top: 2px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Error States */
+    .error-state {
+      background: rgba(220, 53, 69, 0.1);
+      border: 1px solid var(--danger);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .error-state button {
+      background: var(--danger);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .loading-text {
+      text-align: center;
+      padding: 40px;
+      color: var(--navy);
+    }
+
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--creator);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    /* Access Denied Screen */
+    .access-denied {
+      text-align: center;
+      padding: 80px 20px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .access-denied h2 {
+      color: var(--danger);
+      margin-bottom: 20px;
+      font-size: 2em;
+    }
+
+    .access-denied p {
+      color: #64748b;
+      margin-bottom: 30px;
+      font-size: 1.1em;
+    }
+
+    /* Withdrawal History Styles */
+    .withdrawal-history-section {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 40px;
+      border: 1px solid rgba(0, 31, 63, 0.05);
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .history-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .history-table th,
+    .history-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .history-table th {
+      background: #f8fafc;
+      font-weight: 600;
+      color: var(--navy);
+      font-size: 0.9em;
+    }
+
+    .history-table tr:hover {
+      background: #f8fafc;
+    }
+
+    .status-badge {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.8em;
+      font-weight: 600;
+      display: inline-block;
+    }
+
+    .status-pending {
+      background: rgba(255, 193, 7, 0.1);
+      color: var(--warning);
+    }
+
+    .status-approved {
+      background: rgba(40, 167, 69, 0.1);
+      color: var(--success);
+    }
+
+    .status-rejected {
+      background: rgba(220, 53, 69, 0.1);
+      color: var(--danger);
+    }
+
+    .status-paid {
+      background: rgba(0, 123, 255, 0.1);
+      color: #007bff;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #64748b;
+    }
+
+    .empty-state-icon {
+      font-size: 3em;
+      margin-bottom: 15px;
+      opacity: 0.5;
+    }
+
+    .filter-controls {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .filter-select {
+      padding: 10px 15px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.9em;
+      background: white;
+      min-width: 150px;
+    }
+
+    .admin-notes {
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .admin-notes.expanded {
+      white-space: normal;
+      max-width: none;
+      background: #f8f9fa;
+      padding: 8px;
+      border-radius: 4px;
+    }
+
+    .table-loading {
+      text-align: center;
+      padding: 40px;
+    }
+
+    /* Index Help Banner */
+    .index-help {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .index-help a {
+      color: white;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      header {
+        padding: 15px 4%;
+        min-height: 70px;
+      }
+
+      .menu-icon {
+        display: block;
+      }
+
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 85%;
+        height: 100vh;
+        box-shadow: 10px 0 50px rgba(0, 0, 0, 0.1);
+        padding: 100px 30px 40px;
+        z-index: 999;
+        gap: 0;
+      }
+
+      .nav-links.show {
+        display: flex;
+      }
+
+      .nav-links a {
+        padding: 18px 0;
+        border-bottom: 1px solid rgba(0, 31, 63, 0.05);
+        font-size: 1.1em;
+        width: 100%;
+        border-radius: 0;
+      }
+
+      .user-info {
+        flex-direction: column;
+        gap: 20px;
+        margin: 30px 0 0 0;
+        width: 100%;
+        align-items: stretch;
+        border-left: none;
+        border-top: 1px solid rgba(0, 31, 63, 0.05);
+        padding: 20px 0 0 0;
+      }
+
+      .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .quick-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .btn {
+        flex: 1;
+        min-width: 120px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-content {
+        padding: 30px 20px;
+      }
+
+      .history-table {
+        display: block;
+        overflow-x: auto;
+      }
+
+      .filter-controls {
+        flex-direction: column;
+      }
+
+      .filter-select {
+        width: 100%;
+      }
+
+      .history-table th,
+      .history-table td {
+        padding: 10px 8px;
+        font-size: 0.85em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .dashboard {
+        padding: 30px 4%;
+      }
+
+      .stat-card, .contract-status, .withdrawal-section, .paypal-section, .youtube-section {
+        padding: 25px 20px;
+      }
+
+      .withdrawal-actions, .modal-actions, .youtube-actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .notifications-panel {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Notification System -->
+  <div id="notification" class="notification"></div>
+
+  <!-- Notifications Panel -->
+  <div class="notifications-panel" id="notificationsPanel">
+    <div class="notifications-header">
+      <h3 class="notifications-title">Notifications</h3>
+      <button class="close-modal" onclick="closeNotifications()"></button>
+    </div>
+    <div id="notificationsList">
+      <!-- Notifications will be populated here -->
+    </div>
+  </div>
+
+  <!-- Withdrawal Modal -->
+  <div class="modal" id="withdrawalModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Request Withdrawal</h3>
+        <button class="close-modal" onclick="closeModal('withdrawalModal')"></button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Available Balance</label>
+        <div class="balance-display" id="modalBalance">€0.00</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Withdrawal Amount (€)</label>
+        <input type="number" class="form-input" id="withdrawalAmount" placeholder="Enter amount" min="10" step="0.01">
+      </div>
+      <div class="form-group">
+        <label class="form-label">PayPal Email</label>
+        <input type="email" class="form-input" id="paypalEmail" placeholder="Your PayPal email">
+      </div>
+      <div class="modal-actions">
+        <button class="btn outline" onclick="closeModal('withdrawalModal')">Cancel</button>
+        <button class="btn success" onclick="requestWithdrawal()">Request Withdrawal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PayPal Settings Modal -->
+  <div class="modal" id="paypalModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">PayPal Settings</h3>
+        <button class="close-modal" onclick="closeModal('paypalModal')"></button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">PayPal Email</label>
+        <input type="email" class="form-input" id="paypalSettingsEmail" placeholder="Your PayPal email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirm PayPal Email</label>
+        <input type="email" class="form-input" id="paypalConfirmEmail" placeholder="Confirm your PayPal email">
+      </div>
+      <div class="modal-actions">
+        <button class="btn outline" onclick="closeModal('paypalModal')">Cancel</button>
+        <button class="btn main" onclick="savePayPalSettings()">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- YouTube Channel Modal -->
+  <div class="modal" id="youtubeModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Add YouTube Channel</h3>
+        <button class="close-modal" onclick="closeModal('youtubeModal')"></button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">YouTube Channel URL</label>
+        <input type="url" class="form-input" id="youtubeChannelUrl" placeholder="https://youtube.com/c/yourchannel">
+        <small style="color: #64748b; margin-top: 5px; display: block;">
+          Paste your full YouTube channel URL
+        </small>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Channel Name (Optional)</label>
+        <input type="text" class="form-input" id="channelName" placeholder="Your channel name">
+      </div>
+      <div class="modal-actions">
+        <button class="btn outline" onclick="closeModal('youtubeModal')">Cancel</button>
+        <button class="btn youtube" onclick="saveYouTubeChannel()">
+          <span></span> Save Channel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <button class="menu-icon" onclick="toggleMenu()"></button>
+    <div class="brand">EVERGREEN EMPIRE</div>
+    <nav>
+      <div class="nav-links" id="navMenu">
+        <a href="#" onclick="closeMenu()">Dashboard</a>
+        <a href="#withdrawal-history" onclick="closeMenu()">Withdrawals</a>
+        <div class="notification-bell" onclick="toggleNotifications()">
+          <span></span>
+          <span class="notification-badge" id="notificationCount" style="display: none;">0</span>
+        </div>
+        <div class="user-info" id="userInfo" style="display: none;">
+          <span class="user-email" id="userEmail"></span>
+          <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Dashboard Content -->
+  <div class="dashboard">
+    <!-- Access Denied Screen -->
+    <div id="accessDenied" class="access-denied" style="display: none;">
+      <h2>Access Denied</h2>
+      <p>You must be logged in to access the creator dashboard.</p>
+      <button class="btn main" onclick="redirectToLogin()">Go to Login</button>
+    </div>
+
+    <!-- Dashboard Content (Only shown when authenticated) -->
+    <div id="dashboardContent" style="display: none;">
+      <!-- Index Help Banner -->
+      <div class="index-help" id="indexHelp" style="display: none;">
+        <h3> Database Index Required</h3>
+        <p>We need to create a database index for optimal performance.</p>
+        <p><a href="https://console.firebase.google.com/v1/r/project/creators-portal-428c5/firestore/indexes?create_composite=Cllwcm9qZWN0cy9jcmVhdG9ycy1wb3J0YWwtNDI4YzUvZGF0YWJhc2VzLyhkZWZhdWx0KS9jb2xsZWN0aW9uR3JvdXBzL3dpdGhkcmF3YWxzL2luZGV4ZXMvXxABGgoKBnVzZXJJZBABGg0KCXRpbWVzdGFtcBACGgwKCF9fbmFtZV9fEAI" target="_blank">Click here to create the index automatically</a></p>
+        <p><small>This is a one-time setup. The dashboard will work better once the index is created.</small></p>
+      </div>
+
+      <!-- Dashboard Header -->
+      <div class="dashboard-header">
+        <h1 class="dashboard-title">Creator Dashboard</h1>
+        <div class="quick-actions">
+          <button class="btn success" onclick="refreshStats()">Refresh Stats</button>
+          <button class="btn main" onclick="openModal('withdrawalModal')">Withdraw Funds</button>
+          <button class="btn outline" onclick="openModal('paypalModal')">PayPal Settings</button>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div id="loadingState" class="loading-text">
+        <div class="loading-spinner"></div>
+        <p>Loading your dashboard data...</p>
+      </div>
+
+      <!-- Error State -->
+      <div id="errorState" class="error-state" style="display: none;">
+        <h3>Database Index Required</h3>
+        <p id="errorMessage">We need to create a database index for optimal performance.</p>
+        <div style="margin: 20px 0;">
+          <a href="https://console.firebase.google.com/v1/r/project/creators-portal-428c5/firestore/indexes?create_composite=Cllwcm9qZWN0cy9jcmVhdG9ycy1wb3J0YWwtNDI4YzUvZGF0YWJhc2VzLyhkZWZhdWx0KS9jb2xsZWN0aW9uR3JvdXBzL3dpdGhkcmF3YWxzL2luZGV4ZXMvXxABGgoKBnVzZXJJZBABGg0KCXRpbWVzdGFtcBACGgwKCF9fbmFtZV9fEAI" 
+             target="_blank" class="btn success" style="display: inline-block; margin: 10px;">
+             Create Index Automatically
+          </a>
+          <button class="btn outline" onclick="initializeDashboard()" style="margin: 10px;">
+             Retry Loading
+          </button>
+        </div>
+        <p><small>This is a one-time setup. The index may take 2-5 minutes to build.</small></p>
+      </div>
+
+      <!-- Main Dashboard Content -->
+      <div id="mainDashboardContent" style="display: none;">
+        <!-- YouTube Channel Section -->
+        <div class="youtube-section" id="youtubeSection">
+          <div class="youtube-header">
+            <h3 class="section-title">YouTube Channel</h3>
+            <div class="youtube-status not-connected" id="youtubeStatus">Not Connected</div>
+          </div>
+          <div id="youtubeConnected" style="display: none;">
+            <div class="youtube-link-display">
+              <span class="youtube-icon"></span>
+              <span class="youtube-url" id="currentYouTubeUrl">No channel connected</span>
+            </div>
+            <p style="margin-bottom: 20px; color: #64748b;">
+              Your YouTube channel is connected. Admins can see your channel for verification and analytics.
+            </p>
+            <div class="youtube-actions">
+              <button class="btn outline" onclick="openModal('youtubeModal')">Change Channel</button>
+              <button class="btn youtube" onclick="visitYouTubeChannel()">Visit Channel</button>
+            </div>
+          </div>
+          <div id="youtubeNotConnected">
+            <p style="margin-bottom: 20px; color: #64748b;">
+              Connect your YouTube channel to start earning royalties.
+            </p>
+            <button class="btn youtube" onclick="openModal('youtubeModal')">
+              <span></span> Connect YouTube Channel
+            </button>
+          </div>
+        </div>
+
+        <!-- Statistics Overview -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="totalViews">0</div>
+            <div class="stat-label">Total Views</div>
+            <div class="stat-change positive">Live Updates</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="monetizedViews">0</div>
+            <div class="stat-label">Monetized Views</div>
+            <div class="stat-change positive">Live Updates</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="availableBalance">€0.00</div>
+            <div class="stat-label">Available Balance</div>
+            <div class="stat-change positive">Ready to withdraw</div>
+          </div>
+        </div>
+
+        <!-- Contract Status -->
+        <div class="contract-status">
+          <div class="status-header">
+            <h3 class="status-title">Contract Status</h3>
+            <div class="status-badge active" id="contractStatusBadge">Active</div>
+          </div>
+          <div class="status-details">
+            <div class="status-item">
+              <span class="status-label">Start Date</span>
+              <span class="status-value" id="contractStart">Loading...</span>
+            </div>
+            <div class="status-item">
+              <span class="status-label">Next Payout</span>
+              <span class="status-value" id="nextPayout">Loading...</span>
+            </div>
+            <div class="status-item">
+              <span class="status-label">Royalty Rate</span>
+              <span class="status-value">30%</span>
+            </div>
+            <div class="status-item">
+              <span class="status-label">Payment Method</span>
+              <span class="status-value" id="paymentMethod">PayPal</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Withdrawal Section -->
+        <div class="withdrawal-section">
+          <div class="withdrawal-header">
+            <h3 class="section-title">Withdrawal</h3>
+            <div class="balance-display" id="withdrawalBalance">€0.00</div>
+          </div>
+          <p style="margin-bottom: 20px; color: #64748b;">Request a withdrawal of your available balance to your PayPal account. Minimum withdrawal amount is €10.</p>
+          <div class="withdrawal-actions">
+            <button class="btn success" onclick="openModal('withdrawalModal')">Request Withdrawal</button>
+            <button class="btn outline" onclick="scrollToWithdrawalHistory()">View History</button>
+          </div>
+        </div>
+
+        <!-- PayPal Integration -->
+        <div class="paypal-section">
+          <div class="paypal-info">
+            <div>
+              <h3 class="section-title">PayPal Integration</h3>
+              <p class="paypal-email" id="currentPayPalEmail">Not connected</p>
+            </div>
+            <div class="paypal-status not-connected" id="paypalStatus">Not Connected</div>
+          </div>
+          <p style="margin-bottom: 20px; color: #64748b;">Connect your PayPal account to receive payments.</p>
+          <button class="btn main" onclick="openModal('paypalModal')">Connect PayPal</button>
+        </div>
+
+        <!-- Withdrawal History Section -->
+        <div class="withdrawal-history-section" id="withdrawal-history">
+          <div class="history-header">
+            <h3 class="section-title">Withdrawal History</h3>
+            <div class="filter-controls">
+              <select class="filter-select" id="statusFilter" onchange="filterWithdrawals()">
+                <option value="all">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="paid">Paid</option>
+                <option value="rejected">Rejected</option>
+              </select>
+              <select class="filter-select" id="dateFilter" onchange="filterWithdrawals()">
+                <option value="all">All Time</option>
+                <option value="30">Last 30 Days</option>
+                <option value="90">Last 90 Days</option>
+                <option value="365">Last Year</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="table-container">
+            <table class="history-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Amount</th>
+                  <th>PayPal Email</th>
+                  <th>Status</th>
+                  <th>Processed Date</th>
+                  <th>Admin Notes</th>
+                </tr>
+              </thead>
+              <tbody id="withdrawalHistoryTable">
+                <tr>
+                  <td colspan="6" class="table-loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading withdrawal history...</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase Configuration -->
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAuSEqhLenwrEz-qrIn1drjAugy1YSkDlI",
+      authDomain: "creators-portal-428c5.firebaseapp.com",
+      projectId: "creators-portal-428c5",
+      storageBucket: "creators-portal-428c5.firebasestorage.app",
+      messagingSenderId: "499280036303",
+      appId: "1:499280036303:web:b4d80d3b7fe1291381d2ba",
+      measurementId: "G-CYWGD80FS5"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+  </script>
+
+  <script>
+    // Dashboard State Management
+    let userData = {};
+    let notifications = [];
+    let withdrawals = [];
+    let isInitialized = false;
+    let notificationsListener = null;
+    let statsListener = null;
+    let userListener = null;
+    let withdrawalsListener = null;
+
+    // Enhanced Notification System
+    function showNotification(message, type = 'info') {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.className = `notification ${type} show`;
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 5000);
+      
+      console.log(`Notification [${type}]:`, message);
+    }
+
+    // Enhanced Error Display
+    function showDetailedError(error, context) {
+      console.error(`${context}:`, error);
+      
+      let userMessage = `Error: ${error.message}`;
+      
+      if (error.code === 'failed-precondition') {
+        userMessage = 'Database index required. Please create the index using the link below.';
+        document.getElementById('indexHelp').style.display = 'block';
+      } else if (error.code === 'permission-denied') {
+        userMessage = 'Database permission denied. Please check if you are logged in and have proper access rights.';
+      } else if (error.code === 'unavailable') {
+        userMessage = 'Database is temporarily unavailable. Please check your internet connection.';
+      }
+      
+      showNotification(`${context} - ${userMessage}`, 'error');
+      
+      const errorDiv = document.getElementById('errorState');
+      const errorMessage = document.getElementById('errorMessage');
+      if (errorDiv && errorMessage) {
+        errorMessage.textContent = userMessage;
+        showError();
+      }
+    }
+
+    // Mobile Menu Functions
+    function toggleMenu() {
+      const nav = document.getElementById('navMenu');
+      nav.classList.toggle('show');
+    }
+
+    function closeMenu() {
+      const nav = document.getElementById('navMenu');
+      nav.classList.remove('show');
+    }
+
+    // Modal Functions
+    function openModal(modalId) {
+      document.getElementById(modalId).classList.add('active');
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('active');
+    }
+
+    // Notifications Panel
+    function toggleNotifications() {
+      const panel = document.getElementById('notificationsPanel');
+      panel.classList.toggle('active');
+    }
+
+    function closeNotifications() {
+      document.getElementById('notificationsPanel').classList.remove('active');
+    }
+
+    // UI State Management
+    function showAccessDenied() {
+      document.getElementById('accessDenied').style.display = 'block';
+      document.getElementById('dashboardContent').style.display = 'none';
+    }
+
+    function showDashboard() {
+      document.getElementById('accessDenied').style.display = 'none';
+      document.getElementById('dashboardContent').style.display = 'block';
+    }
+
+    function showLoading() {
+      document.getElementById('loadingState').style.display = 'block';
+      document.getElementById('errorState').style.display = 'none';
+      document.getElementById('mainDashboardContent').style.display = 'none';
+      document.getElementById('indexHelp').style.display = 'none';
+    }
+
+    function showError() {
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('errorState').style.display = 'block';
+      document.getElementById('mainDashboardContent').style.display = 'none';
+    }
+
+    function showMainContent() {
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('errorState').style.display = 'none';
+      document.getElementById('mainDashboardContent').style.display = 'block';
+      document.getElementById('indexHelp').style.display = 'none';
+    }
+
+    // Load User Data with Real-time Listeners
+    async function loadUserData(userId) {
+      try {
+        console.log('Loading user data for:', userId);
+        showLoading();
+        
+        // Setup all real-time listeners with error handling
+        await setupRealTimeUserData(userId);
+        await setupRealTimeStats(userId);
+        await setupRealTimeNotifications(userId);
+        await setupRealTimeWithdrawals(userId);
+        
+        showMainContent();
+        showNotification('Dashboard loaded successfully! Real-time updates active.', 'success');
+        
+      } catch (error) {
+        showDetailedError(error, 'Loading user data');
+      }
+    }
+
+    // Real-time User Data Listener
+    async function setupRealTimeUserData(userId) {
+      if (userListener) userListener();
+      
+      try {
+        userListener = db.collection('users').doc(userId)
+          .onSnapshot({
+            next: (doc) => {
+              if (doc.exists) {
+                userData = doc.data();
+                console.log('User data updated:', userData);
+                updateUserDisplay(userData);
+              } else {
+                console.log('User document does not exist, creating...');
+                createUserDocument(userId);
+              }
+            },
+            error: (error) => {
+              showDetailedError(error, 'User data listener');
+            }
+          });
+      } catch (error) {
+        showDetailedError(error, 'Setting up user data listener');
+      }
+    }
+
+    // Real-time Stats Listener
+    async function setupRealTimeStats(userId) {
+      if (statsListener) statsListener();
+      
+      try {
+        statsListener = db.collection('userStats').doc(userId)
+          .onSnapshot({
+            next: (doc) => {
+              if (doc.exists) {
+                const stats = doc.data();
+                console.log('Stats updated:', stats);
+                const mappedStats = {
+                  totalViews: stats.total_views || 0,
+                  monetizedViews: stats.monetized_views || 0,
+                  availableBalance: stats.available_balance || 0,
+                  totalEarnings: stats.total_earnings || 0
+                };
+                updateStatsDisplay(mappedStats);
+              } else {
+                console.log('Stats document does not exist, creating...');
+                createStatsDocument(userId);
+              }
+            },
+            error: (error) => {
+              showDetailedError(error, 'Stats listener');
+            }
+          });
+      } catch (error) {
+        showDetailedError(error, 'Setting up stats listener');
+      }
+    }
+
+    // Real-time Notifications Listener (without ordering to avoid index issues)
+    async function setupRealTimeNotifications(userId) {
+      if (notificationsListener) notificationsListener();
+      
+      try {
+        // Simple query without ordering to avoid index issues
+        notificationsListener = db.collection('notifications')
+          .where('userId', '==', userId)
+          .limit(20)
+          .onSnapshot({
+            next: (snapshot) => {
+              notifications = [];
+              snapshot.forEach(doc => {
+                notifications.push({ id: doc.id, ...doc.data() });
+              });
+              // Sort client-side to avoid index requirements
+              notifications.sort((a, b) => {
+                const timeA = a.timestamp?.toDate() || new Date(0);
+                const timeB = b.timestamp?.toDate() || new Date(0);
+                return timeB - timeA; // Descending order
+              });
+              console.log('Notifications updated:', notifications.length, 'notifications');
+              updateNotificationsDisplay();
+            },
+            error: (error) => {
+              showDetailedError(error, 'Notifications listener');
+            }
+          });
+      } catch (error) {
+        showDetailedError(error, 'Setting up notifications listener');
+      }
+    }
+
+    // Real-time Withdrawals Listener (with fallback for index issues)
+    async function setupRealTimeWithdrawals(userId) {
+      if (withdrawalsListener) withdrawalsListener();
+      
+      try {
+        // Try the optimized query first (requires index)
+        withdrawalsListener = db.collection('withdrawals')
+          .where('userId', '==', userId)
+          .orderBy('timestamp', 'desc')
+          .onSnapshot({
+            next: (snapshot) => {
+              withdrawals = [];
+              snapshot.forEach(doc => {
+                const data = doc.data();
+                withdrawals.push({ 
+                  id: doc.id, 
+                  ...data
+                });
+              });
+              console.log('Withdrawals updated (optimized):', withdrawals.length, 'withdrawals');
+              updateWithdrawalHistoryDisplay();
+            },
+            error: (error) => {
+              if (error.code === 'failed-precondition') {
+                console.log('Index not ready, using fallback query...');
+                setupFallbackWithdrawals(userId);
+              } else {
+                showDetailedError(error, 'Withdrawals listener');
+              }
+            }
+          });
+      } catch (error) {
+        showDetailedError(error, 'Setting up withdrawals listener');
+      }
+    }
+
+    // Fallback withdrawals query (no ordering to avoid index requirements)
+    function setupFallbackWithdrawals(userId) {
+      if (withdrawalsListener) withdrawalsListener();
+      
+      withdrawalsListener = db.collection('withdrawals')
+        .where('userId', '==', userId)
+        .onSnapshot({
+          next: (snapshot) => {
+            withdrawals = [];
+            snapshot.forEach(doc => {
+              const data = doc.data();
+              withdrawals.push({ 
+                id: doc.id, 
+                ...data
+              });
+            });
+            // Sort client-side to avoid index requirements
+            withdrawals.sort((a, b) => {
+              const timeA = a.timestamp?.toDate() || new Date(0);
+              const timeB = b.timestamp?.toDate() || new Date(0);
+              return timeB - timeA; // Descending order
+            });
+            console.log('Withdrawals updated (fallback):', withdrawals.length, 'withdrawals');
+            updateWithdrawalHistoryDisplay();
+            showNotification('Using fallback mode until index is ready', 'info');
+          },
+          error: (error) => {
+            showDetailedError(error, 'Fallback withdrawals listener');
+          }
+        });
+    }
+
+    // Create user document if it doesn't exist
+    async function createUserDocument(userId) {
+      try {
+        const user = auth.currentUser;
+        await db.collection('users').doc(userId).set({
+          email: user.email,
+          name: user.displayName || 'Creator',
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          contractStatus: 'active',
+          paypalEmail: '',
+          role: 'creator',
+          youtubeLink: ''
+        });
+        console.log('User document created successfully');
+      } catch (error) {
+        showDetailedError(error, 'Creating user document');
+      }
+    }
+
+    // Create stats document if it doesn't exist
+    async function createStatsDocument(userId) {
+      try {
+        await db.collection('userStats').doc(userId).set({
+          total_views: 0,
+          monetized_views: 0,
+          available_balance: 0,
+          total_earnings: 0,
+          lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        console.log('Stats document created successfully');
+      } catch (error) {
+        showDetailedError(error, 'Creating stats document');
+      }
+    }
+
+    // Update User Display
+    function updateUserDisplay(data) {
+      // PayPal Email
+      if (data.paypalEmail) {
+        document.getElementById('currentPayPalEmail').textContent = data.paypalEmail;
+        document.getElementById('paypalSettingsEmail').value = data.paypalEmail;
+        document.getElementById('paypalConfirmEmail').value = data.paypalEmail;
+        document.getElementById('paypalEmail').value = data.paypalEmail;
+        document.getElementById('paypalStatus').textContent = 'Connected';
+        document.getElementById('paypalStatus').className = 'paypal-status connected';
+      }
+      
+      // Contract Status
+      if (data.contractStatus) {
+        document.getElementById('contractStatusBadge').textContent = data.contractStatus;
+        document.getElementById('contractStatusBadge').className = `status-badge ${data.contractStatus.toLowerCase()}`;
+      }
+      
+      // YouTube Channel
+      if (data.youtubeLink) {
+        document.getElementById('currentYouTubeUrl').textContent = data.youtubeLink;
+        document.getElementById('youtubeStatus').textContent = 'Connected';
+        document.getElementById('youtubeStatus').className = 'youtube-status connected';
+        document.getElementById('youtubeConnected').style.display = 'block';
+        document.getElementById('youtubeNotConnected').style.display = 'none';
+      } else {
+        document.getElementById('youtubeConnected').style.display = 'none';
+        document.getElementById('youtubeNotConnected').style.display = 'block';
+      }
+
+      // Contract Dates
+      if (data.createdAt) {
+        const startDate = data.createdAt.toDate();
+        document.getElementById('contractStart').textContent = startDate.toLocaleDateString();
+        const nextPayout = new Date(startDate);
+        nextPayout.setMonth(nextPayout.getMonth() + 1);
+        nextPayout.setDate(15);
+        document.getElementById('nextPayout').textContent = nextPayout.toLocaleDateString();
+      } else {
+        document.getElementById('contractStart').textContent = 'Not set';
+        document.getElementById('nextPayout').textContent = 'Not set';
+      }
+    }
+
+    // Update Stats Display
+    function updateStatsDisplay(stats) {
+      document.getElementById('totalViews').textContent = stats.totalViews?.toLocaleString() || '0';
+      document.getElementById('monetizedViews').textContent = stats.monetizedViews?.toLocaleString() || '0';
+      document.getElementById('availableBalance').textContent = `€${stats.availableBalance?.toFixed(2) || '0.00'}`;
+      document.getElementById('withdrawalBalance').textContent = `€${stats.availableBalance?.toFixed(2) || '0.00'}`;
+      document.getElementById('modalBalance').textContent = `€${stats.availableBalance?.toFixed(2) || '0.00'}`;
+    }
+
+    // Update Notifications Display
+    function updateNotificationsDisplay() {
+      const notificationsList = document.getElementById('notificationsList');
+      const notificationCount = document.getElementById('notificationCount');
+      
+      const unreadCount = notifications.filter(n => !n.read).length;
+      notificationCount.textContent = unreadCount;
+      notificationCount.style.display = unreadCount > 0 ? 'flex' : 'none';
+      
+      notificationsList.innerHTML = '';
+      
+      if (notifications.length === 0) {
+        notificationsList.innerHTML = '<p style="text-align: center; color: #64748b; padding: 20px;">No notifications yet</p>';
+        return;
+      }
+      
+      notifications.forEach(notification => {
+        const notificationElement = document.createElement('div');
+        notificationElement.className = `notification-item ${notification.read ? '' : 'unread'}`;
+        notificationElement.innerHTML = `
+          <div class="notification-title">${notification.title || 'Notification'}</div>
+          <div class="notification-message">${notification.message || 'No message'}</div>
+          <div class="notification-time">${formatTime(notification.timestamp?.toDate())}</div>
+        `;
+        notificationElement.addEventListener('click', () => markAsRead(notification.id));
+        notificationsList.appendChild(notificationElement);
+      });
+    }
+
+    // Update Withdrawal History Display
+    function updateWithdrawalHistoryDisplay() {
+      const tableBody = document.getElementById('withdrawalHistoryTable');
+      
+      if (withdrawals.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="6" class="empty-state">
+              <div class="empty-state-icon"></div>
+              <p>No withdrawal history found</p>
+              <p style="font-size: 0.9em; margin-top: 10px;">Your withdrawal requests will appear here</p>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+      
+      tableBody.innerHTML = '';
+      
+      withdrawals.forEach(withdrawal => {
+        const row = document.createElement('tr');
+        
+        // Format dates safely
+        const requestDate = withdrawal.timestamp ? 
+          withdrawal.timestamp.toDate().toLocaleDateString() : 'N/A';
+        
+        const processedDate = withdrawal.processedAt ? 
+          withdrawal.processedAt.toDate().toLocaleDateString() : 'N/A';
+        
+        // Determine status badge class
+        let statusClass = 'status-pending';
+        let statusText = 'Pending';
+        
+        if (withdrawal.status === 'approved') {
+          statusClass = 'status-approved';
+          statusText = 'Approved';
+        } else if (withdrawal.status === 'paid') {
+          statusClass = 'status-paid';
+          statusText = 'Paid';
+        } else if (withdrawal.status === 'rejected') {
+          statusClass = 'status-rejected';
+          statusText = 'Rejected';
+        }
+        
+        // Handle admin notes with expandable functionality
+        const adminNotes = withdrawal.adminNotes || 'No notes';
+        const isLongNote = adminNotes.length > 30;
+        
+        row.innerHTML = `
+          <td>${requestDate}</td>
+          <td><strong>€${withdrawal.amount?.toFixed(2) || '0.00'}</strong></td>
+          <td>${withdrawal.paypalEmail || 'N/A'}</td>
+          <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+          <td>${processedDate}</td>
+          <td class="admin-notes ${isLongNote ? '' : 'expanded'}" 
+              onclick="${isLongNote ? 'this.classList.toggle(\'expanded\')' : ''}">
+            ${adminNotes}
+          </td>
+        `;
+        
+        tableBody.appendChild(row);
+      });
+    }
+
+    // Filter Withdrawals
+    function filterWithdrawals() {
+      const statusFilter = document.getElementById('statusFilter').value;
+      const dateFilter = document.getElementById('dateFilter').value;
+      
+      let filteredWithdrawals = [...withdrawals];
+      
+      // Apply status filter
+      if (statusFilter !== 'all') {
+        filteredWithdrawals = filteredWithdrawals.filter(w => w.status === statusFilter);
+      }
+      
+      // Apply date filter
+      if (dateFilter !== 'all') {
+        const daysAgo = parseInt(dateFilter);
+        const cutoffDate = new Date();
+        cutoffDate.setDate(cutoffDate.getDate() - daysAgo);
+        
+        filteredWithdrawals = filteredWithdrawals.filter(w => {
+          if (!w.timestamp) return false;
+          const withdrawalDate = w.timestamp.toDate();
+          return withdrawalDate >= cutoffDate;
+        });
+      }
+      
+      // Update display with filtered withdrawals
+      const tableBody = document.getElementById('withdrawalHistoryTable');
+      
+      if (filteredWithdrawals.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="6" class="empty-state">
+              <div class="empty-state-icon"></div>
+              <p>No withdrawals match your filters</p>
+              <button class="btn outline" onclick="resetFilters()" style="margin-top: 10px;">
+                Reset Filters
+              </button>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+      
+      tableBody.innerHTML = '';
+      
+      filteredWithdrawals.forEach(withdrawal => {
+        const row = document.createElement('tr');
+        
+        const requestDate = withdrawal.timestamp ? 
+          withdrawal.timestamp.toDate().toLocaleDateString() : 'N/A';
+        
+        const processedDate = withdrawal.processedAt ? 
+          withdrawal.processedAt.toDate().toLocaleDateString() : 'N/A';
+        
+        let statusClass = 'status-pending';
+        let statusText = 'Pending';
+        
+        if (withdrawal.status === 'approved') {
+          statusClass = 'status-approved';
+          statusText = 'Approved';
+        } else if (withdrawal.status === 'paid') {
+          statusClass = 'status-paid';
+          statusText = 'Paid';
+        } else if (withdrawal.status === 'rejected') {
+          statusClass = 'status-rejected';
+          statusText = 'Rejected';
+        }
+        
+        const adminNotes = withdrawal.adminNotes || 'No notes';
+        const isLongNote = adminNotes.length > 30;
+        
+        row.innerHTML = `
+          <td>${requestDate}</td>
+          <td><strong>€${withdrawal.amount?.toFixed(2) || '0.00'}</strong></td>
+          <td>${withdrawal.paypalEmail || 'N/A'}</td>
+          <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+          <td>${processedDate}</td>
+          <td class="admin-notes ${isLongNote ? '' : 'expanded'}" 
+              onclick="${isLongNote ? 'this.classList.toggle(\'expanded\')' : ''}">
+            ${adminNotes}
+          </td>
+        `;
+        
+        tableBody.appendChild(row);
+      });
+    }
+
+    // Reset filters
+    function resetFilters() {
+      document.getElementById('statusFilter').value = 'all';
+      document.getElementById('dateFilter').value = 'all';
+      updateWithdrawalHistoryDisplay();
+    }
+
+    // Utility Functions
+    function formatTime(date) {
+      if (!date) return 'Recently';
+      const now = new Date();
+      const diffMs = now - date;
+      const diffMins = Math.floor(diffMs / 60000);
+      const diffHours = Math.floor(diffMs / 3600000);
+      const diffDays = Math.floor(diffMs / 86400000);
+      
+      if (diffMins < 1) return 'Just now';
+      if (diffMins < 60) return `${diffMins} min ago`;
+      if (diffHours < 24) return `${diffHours} hr ago`;
+      if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+      return date.toLocaleDateString();
+    }
+
+    async function markAsRead(notificationId) {
+      try {
+        await db.collection('notifications').doc(notificationId).update({ read: true });
+      } catch (error) {
+        console.error('Error marking notification as read:', error);
+      }
+    }
+
+    // YouTube Channel Functions
+    async function saveYouTubeChannel() {
+      const youtubeUrl = document.getElementById('youtubeChannelUrl').value;
+      const channelName = document.getElementById('channelName').value;
+      
+      if (!youtubeUrl) {
+        showNotification('Please enter your YouTube channel URL', 'error');
+        return;
+      }
+      
+      if (!isValidYouTubeUrl(youtubeUrl)) {
+        showNotification('Please enter a valid YouTube channel URL', 'error');
+        return;
+      }
+      
+      const user = auth.currentUser;
+      
+      try {
+        await db.collection('users').doc(user.uid).set({
+          youtubeLink: youtubeUrl,
+          channelName: channelName || null,
+          youtubeConnectedAt: new Date(),
+          lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+        
+        showNotification('YouTube channel connected successfully!', 'success');
+        closeModal('youtubeModal');
+        
+      } catch (error) {
+        showDetailedError(error, 'Saving YouTube channel');
+      }
+    }
+
+    function visitYouTubeChannel() {
+      if (userData.youtubeLink) {
+        window.open(userData.youtubeLink, '_blank');
+      } else {
+        showNotification('No YouTube channel connected', 'error');
+      }
+    }
+
+    function isValidYouTubeUrl(url) {
+      const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/;
+      return youtubeRegex.test(url);
+    }
+
+    // Withdrawal Functions
+    async function requestWithdrawal() {
+      const amount = parseFloat(document.getElementById('withdrawalAmount').value);
+      const paypalEmail = document.getElementById('paypalEmail').value;
+      
+      if (!amount || amount < 10) {
+        showNotification('Minimum withdrawal amount is €10', 'error');
+        return;
+      }
+      
+      if (!paypalEmail || !isValidEmail(paypalEmail)) {
+        showNotification('Please enter a valid PayPal email', 'error');
+        return;
+      }
+      
+      const user = auth.currentUser;
+      
+      try {
+        const statsDoc = await db.collection('userStats').doc(user.uid).get();
+        const stats = statsDoc.exists ? statsDoc.data() : {};
+        const availableBalance = parseFloat(stats.available_balance || 0);
+        
+        if (amount > availableBalance) {
+          showNotification('Insufficient balance for this withdrawal', 'error');
+          return;
+        }
+        
+        // Create withdrawal request
+        const withdrawalData = {
+          userId: user.uid,
+          userEmail: user.email,
+          amount: amount,
+          paypalEmail: paypalEmail,
+          status: 'pending',
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          userName: userData.name || user.email,
+          youtubeLink: userData.youtubeLink || null
+        };
+        
+        console.log('Creating withdrawal:', withdrawalData);
+        
+        await db.collection('withdrawals').add(withdrawalData);
+        
+        showNotification('Withdrawal request submitted successfully!', 'success');
+        closeModal('withdrawalModal');
+        document.getElementById('withdrawalAmount').value = '';
+        
+      } catch (error) {
+        showDetailedError(error, 'Requesting withdrawal');
+      }
+    }
+
+    // PayPal Settings
+    async function savePayPalSettings() {
+      const email = document.getElementById('paypalSettingsEmail').value;
+      const confirmEmail = document.getElementById('paypalConfirmEmail').value;
+      
+      if (!email || !isValidEmail(email)) {
+        showNotification('Please enter a valid email address', 'error');
+        return;
+      }
+      
+      if (email !== confirmEmail) {
+        showNotification('Email addresses do not match', 'error');
+        return;
+      }
+      
+      const user = auth.currentUser;
+      
+      try {
+        await db.collection('users').doc(user.uid).set({
+          paypalEmail: email,
+          lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+        
+        showNotification('PayPal settings updated successfully', 'success');
+        closeModal('paypalModal');
+        
+      } catch (error) {
+        showDetailedError(error, 'Saving PayPal settings');
+      }
+    }
+
+    // Utility Functions
+    function isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+
+    function scrollToWithdrawalHistory() {
+      document.getElementById('withdrawal-history').scrollIntoView({ 
+        behavior: 'smooth' 
+      });
+    }
+
+    async function refreshStats() {
+      const user = auth.currentUser;
+      if (user) {
+        showNotification('Refreshing statistics...', 'info');
+        // Real-time listeners will automatically update the display
+      }
+    }
+
+    // Enhanced Logout Function
+    async function logout() {
+      try {
+        // Remove all real-time listeners
+        if (notificationsListener) notificationsListener();
+        if (statsListener) statsListener();
+        if (userListener) userListener();
+        if (withdrawalsListener) withdrawalsListener();
+        
+        notificationsListener = null;
+        statsListener = null;
+        userListener = null;
+        withdrawalsListener = null;
+        
+        await auth.signOut();
+        showNotification('Successfully logged out', 'success');
+        
+        setTimeout(() => {
+          window.location.href = 'sign-in.html';
+        }, 1500);
+        
+      } catch (error) {
+        console.error('Logout error:', error);
+        showNotification('Error logging out', 'error');
+        setTimeout(() => {
+          window.location.href = 'sign-in.html';
+        }, 2000);
+      }
+    }
+
+    function redirectToLogin() {
+      window.location.href = 'sign-in.html';
+    }
+
+    // Initialize Dashboard
+    async function initializeDashboard() {
+      if (isInitialized) return;
+      
+      showLoading();
+      showDashboard();
+      
+      try {
+        auth.onAuthStateChanged(async (user) => {
+          if (user) {
+            console.log('User authenticated:', user.email);
+            
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            if (userDoc.exists) {
+              const userData = userDoc.data();
+              if (userData.role === 'admin') {
+                showNotification('Redirecting to admin portal...', 'info');
+                setTimeout(() => {
+                  window.location.href = 'admin-portal.html';
+                }, 2000);
+                return;
+              }
+            }
+            
+            await loadUserData(user.uid);
+          } else {
+            console.log('No user authenticated');
+            showAccessDenied();
+          }
+        });
+        
+        isInitialized = true;
+      } catch (error) {
+        showDetailedError(error, 'Initializing dashboard');
+      }
+    }
+
+    // Event Listeners
+    document.addEventListener('click', function(event) {
+      // Close modals when clicking outside
+      const modals = document.querySelectorAll('.modal.active');
+      modals.forEach(modal => {
+        if (event.target === modal) {
+          modal.classList.remove('active');
+        }
+      });
+      
+      // Close notifications panel when clicking outside
+      const notificationsPanel = document.getElementById('notificationsPanel');
+      if (event.target === notificationsPanel) {
+        closeNotifications();
+      }
+      
+      // Close mobile menu when clicking outside
+      const nav = document.getElementById('navMenu');
+      const menuIcon = document.querySelector('.menu-icon');
+      if (!nav.contains(event.target) && !menuIcon.contains(event.target) && nav.classList.contains('show')) {
+        closeMenu();
+      }
+    });
+
+    // Initialize the dashboard when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('Creator Dashboard initializing...');
+      initializeDashboard();
+    });
+  </script>
+</body>
+</html>

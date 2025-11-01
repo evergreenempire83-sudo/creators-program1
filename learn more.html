@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Learn More - How to Use EverGreen Sounds | EverGreen Empire</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #001f3f;
+      --gold: #d4af37;
+      --light-gold: #e6d4a8;
+      --white: #ffffff;
+      --light: #f5f7fa;
+      --dark-navy: #071b3b;
+      --shadow: rgba(0, 31, 63, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: var(--white);
+      color: var(--navy);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* HEADER */
+    header {
+      background: var(--white);
+      box-shadow: 0 2px 20px var(--shadow);
+      padding: 18px 5%;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      font-family: "Montserrat", sans-serif;
+      font-size: clamp(1.5em, 4vw, 2em);
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    /* NAV MENU */
+    nav {
+      display: flex;
+      align-items: center;
+    }
+
+    .menu-icon {
+      display: none;
+      font-size: 1.5em;
+      color: var(--navy);
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 5px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: clamp(15px, 2vw, 25px);
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--navy);
+      font-weight: 500;
+      font-size: clamp(0.8em, 1.5vw, 0.9em);
+      transition: 0.3s;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-left: 10px;
+    }
+
+    .user-email {
+      font-size: 0.8em;
+      color: var(--navy);
+      background: var(--light);
+      padding: 5px 12px;
+      border-radius: 20px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 150px;
+    }
+
+    .logout-btn {
+      background: var(--gold);
+      color: var(--navy);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.8em;
+      transition: 0.3s;
+      white-space: nowrap;
+    }
+
+    .logout-btn:hover {
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    /* MOBILE MENU */
+    @media (max-width: 768px) {
+      header {
+        padding: 15px 5%;
+        flex-wrap: wrap;
+      }
+
+      .brand {
+        order: 2;
+        flex: 1;
+        text-align: center;
+      }
+
+      .menu-icon {
+        display: block;
+        order: 1;
+      }
+
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        background: var(--white);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 85%;
+        height: 100vh;
+        box-shadow: 3px 0 15px var(--shadow);
+        padding: 80px 25px 30px;
+        text-align: left;
+        z-index: 999;
+        border-top-right-radius: 20px;
+        gap: 0;
+      }
+
+      .nav-links a {
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+        font-size: 1em;
+        width: 100%;
+      }
+
+      .nav-links.show {
+        display: flex;
+        animation: slideIn 0.3s ease forwards;
+      }
+
+      .user-info {
+        flex-direction: column;
+        gap: 15px;
+        margin: 20px 0 0 0;
+        width: 100%;
+        align-items: flex-start;
+      }
+
+      .user-email {
+        max-width: 100%;
+        text-align: center;
+      }
+
+      .logout-btn {
+        width: 100%;
+        text-align: center;
+      }
+
+      @keyframes slideIn {
+        from { transform: translateX(-100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+    }
+
+    /* HERO SECTION */
+    .learn-hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--dark-navy) 100%);
+      color: var(--white);
+      padding: clamp(80px, 12vw, 120px) 5%;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .learn-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" opacity="0.05"><polygon fill="white" points="0,1000 1000,0 1000,1000"/></svg>');
+      background-size: cover;
+    }
+
+    .learn-hero h1 {
+      font-family: "Montserrat", sans-serif;
+      font-size: clamp(2.2em, 6vw, 3.5em);
+      margin-bottom: 20px;
+      line-height: 1.1;
+      position: relative;
+    }
+
+    .learn-hero p {
+      max-width: 700px;
+      margin: 0 auto 30px auto;
+      font-size: clamp(1em, 2.5vw, 1.2em);
+      opacity: 0.9;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 30px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      margin: 8px;
+      transition: 0.3s;
+      cursor: pointer;
+      border: none;
+      font-size: clamp(0.9em, 2vw, 1em);
+      text-align: center;
+    }
+
+    .btn.main {
+      background: var(--gold);
+      color: var(--navy);
+    }
+
+    .btn.main:hover {
+      background: var(--white);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .btn.outline {
+      border: 2px solid var(--gold);
+      color: var(--gold);
+      background: transparent;
+    }
+
+    .btn.outline:hover {
+      background: var(--gold);
+      color: var(--navy);
+    }
+
+    section {
+      padding: clamp(60px, 10vw, 100px) 5%;
+    }
+
+    h2 {
+      font-family: "Montserrat", sans-serif;
+      font-size: clamp(2em, 4vw, 2.8em);
+      color: var(--navy);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    h3 {
+      font-family: "Montserrat", sans-serif;
+      font-size: clamp(1.5em, 3vw, 1.8em);
+      color: var(--navy);
+      margin-bottom: 15px;
+    }
+
+    p {
+      font-size: clamp(1em, 2vw, 1.1em);
+      margin-bottom: 20px;
+      color: #444;
+    }
+
+    /* STEPS SECTION */
+    .steps-section {
+      background: var(--light);
+    }
+
+    .steps-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+      margin-bottom: 80px;
+    }
+
+    .step:nth-child(even) {
+      direction: rtl;
+    }
+
+    .step:nth-child(even) .step-content {
+      direction: ltr;
+    }
+
+    .step-content {
+      padding: 20px;
+    }
+
+    .step-number {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      background: var(--gold);
+      color: var(--navy);
+      border-radius: 50%;
+      text-align: center;
+      line-height: 50px;
+      font-weight: 800;
+      font-size: 1.5em;
+      margin-bottom: 20px;
+    }
+
+    .step-visual {
+      background: var(--white);
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 10px 30px var(--shadow);
+      text-align: center;
+      height: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .visual-icon {
+      font-size: 4em;
+      margin-bottom: 20px;
+    }
+
+    .visual-title {
+      font-weight: 700;
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      color: var(--navy);
+    }
+
+    .visual-desc {
+      color: #666;
+      font-size: 0.9em;
+    }
+
+    /* REQUIREMENTS SECTION */
+    .requirements {
+      text-align: center;
+    }
+
+    .requirements-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 40px auto 0;
+    }
+
+    .requirement-card {
+      background: var(--white);
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 5px 20px var(--shadow);
+      transition: 0.3s;
+      border-top: 4px solid var(--gold);
+    }
+
+    .requirement-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .requirement-icon {
+      font-size: 3em;
+      margin-bottom: 20px;
+    }
+
+    .requirement-card h3 {
+      color: var(--navy);
+      margin-bottom: 15px;
+    }
+
+    /* PLATFORMS SECTION */
+    .platforms-section {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--dark-navy) 100%);
+      color: var(--white);
+    }
+
+    .platforms-section h2 {
+      color: var(--white);
+    }
+
+    .platforms-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 40px auto 0;
+    }
+
+    .platform-card {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 30px;
+      text-align: center;
+      transition: 0.3s;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .platform-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255,255,255,0.15);
+    }
+
+    .platform-icon {
+      font-size: 3em;
+      margin-bottom: 20px;
+    }
+
+    .platform-card h3 {
+      color: var(--white);
+      margin-bottom: 15px;
+    }
+
+    .platform-card p {
+      color: rgba(255,255,255,0.8);
+    }
+
+    /* DIAGRAM SECTION */
+    .diagram-section {
+      background: var(--light);
+      text-align: center;
+    }
+
+    .diagram-container {
+      max-width: 1000px;
+      margin: 40px auto 0;
+      background: var(--white);
+      border-radius: 15px;
+      padding: 40px;
+      box-shadow: 0 10px 30px var(--shadow);
+    }
+
+    .diagram {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 40px 0;
+      flex-wrap: wrap;
+    }
+
+    .diagram-step {
+      flex: 1;
+      min-width: 200px;
+      text-align: center;
+      margin: 10px;
+    }
+
+    .diagram-circle {
+      width: 80px;
+      height: 80px;
+      background: var(--gold);
+      border-radius: 50%;
+      margin: 0 auto 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5em;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .diagram-arrow {
+      flex: 0 0 50px;
+      text-align: center;
+      font-size: 2em;
+      color: var(--gold);
+    }
+
+    /* TIPS SECTION */
+    .tips-section {
+      text-align: center;
+    }
+
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 40px auto 0;
+    }
+
+    .tip-card {
+      background: var(--white);
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 5px 20px var(--shadow);
+      transition: 0.3s;
+      text-align: left;
+    }
+
+    .tip-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .tip-icon {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: var(--gold);
+    }
+
+    .tip-card h3 {
+      margin-bottom: 15px;
+    }
+
+    /* CTA SECTION */
+    .cta-section {
+      text-align: center;
+      background: linear-gradient(135deg, var(--gold) 0%, #e6c158 100%);
+      color: var(--navy);
+    }
+
+    .cta-section h2 {
+      color: var(--navy);
+      margin-bottom: 15px;
+    }
+
+    .cta-section p {
+      max-width: 600px;
+      margin: 0 auto 30px;
+      font-size: 1.2em;
+    }
+
+    /* FAQ SECTION */
+    .faq-section {
+      background: var(--light);
+    }
+
+    .faq-container {
+      max-width: 800px;
+      margin: 40px auto 0;
+    }
+
+    .faq-item {
+      background: var(--white);
+      border-radius: 10px;
+      margin-bottom: 15px;
+      box-shadow: 0 3px 10px var(--shadow);
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--navy);
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+
+    .faq-item.active .faq-answer {
+      padding: 0 20px 20px;
+      max-height: 500px;
+    }
+
+    .faq-toggle {
+      font-size: 1.2em;
+      transition: transform 0.3s;
+    }
+
+    .faq-item.active .faq-toggle {
+      transform: rotate(45deg);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      background: var(--navy);
+      color: var(--white);
+      padding: 50px 15px;
+    }
+
+    footer p {
+      margin: 10px 0;
+      font-size: 0.9em;
+      color: rgba(255,255,255,0.7);
+    }
+
+    footer a {
+      color: var(--gold);
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+      color: var(--white);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 968px) {
+      .step {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+      
+      .step:nth-child(even) {
+        direction: ltr;
+      }
+      
+      .diagram {
+        flex-direction: column;
+      }
+      
+      .diagram-arrow {
+        transform: rotate(90deg);
+        margin: 20px 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .requirements-grid,
+      .platforms-grid,
+      .tips-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .diagram-container {
+        padding: 20px;
+      }
+      
+      .step-visual {
+        height: 250px;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header>
+    <button class="menu-icon" onclick="toggleMenu()">☰</button>
+    <div class="brand">EverGreen Empire</div>
+    <nav>
+      <div class="nav-links" id="navMenu">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="index.html#music">Music Library</a>
+        <a href="sign up.html" class="btn main" style="padding: 8px 16px; font-size: 0.8em;">Join Now</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="learn-hero">
+    <h1>Maximize Your Royalties</h1>
+    <p>Learn how to properly use EverGreen sounds to generate maximum revenue from your content across all platforms</p>
+    <div>
+      <a href="sign up.html" class="btn main">Start Earning Today</a>
+      <a href="#steps" class="btn outline">How It Works</a>
+    </div>
+  </section>
+
+  <!-- STEPS SECTION -->
+  <section id="steps" class="steps-section">
+    <div class="steps-container">
+      <h2>How to Use EverGreen Sounds</h2>
+      <p style="text-align: center; max-width: 800px; margin: 0 auto 40px;">Follow these simple steps to start earning royalties from your content</p>
+      
+      <div class="step">
+        <div class="step-content">
+          <div class="step-number">1</div>
+          <h3>Find Our Sounds on YouTube</h3>
+          <p>Search for "EverGreen Empire" or our featured artists (IAkeys, Azra Bloom, Kairo Muse, Zaya) directly on YouTube. Our sounds are available in the official YouTube audio library and through our verified channels.</p>
+          <p>Look for tracks with "EverGreen" in the title or description to ensure you're using royalty-eligible music.</p>
+        </div>
+        <div class="step-visual">
+          <div class="visual-icon">🔍</div>
+          <div class="visual-title">Search & Discover</div>
+          <div class="visual-desc">Find our catalog on YouTube's official audio library</div>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-content">
+          <div class="step-number">2</div>
+          <h3>Set Proper Audio Levels</h3>
+          <p>When adding our sounds to your videos, ensure the audio volume is <strong>at least 15% of the total mix</strong>. This ensures proper detection by content ID systems across all platforms.</p>
+          <p>Audio that's too quiet may not be detected, which means you'll miss out on royalties. Test your audio mix before publishing!</p>
+        </div>
+        <div class="step-visual">
+          <div class="visual-icon">🔊</div>
+          <div class="visual-title">Audio Balance</div>
+          <div class="visual-desc">Minimum 15% volume for proper detection</div>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-content">
+          <div class="step-number">3</div>
+          <h3>Create Optimal Video Length</h3>
+          <p>For maximum royalty generation, your videos should be:</p>
+          <ul style="margin-left: 20px; margin-bottom: 20px;">
+            <li><strong>Minimum 35 seconds</strong> for proper tracking</li>
+            <li><strong>Ideal: 1+ minutes</strong> for optimal earnings</li>
+            <li>Longer content = More royalty opportunities</li>
+          </ul>
+          <p>Shorter videos may not generate significant royalties due to platform limitations.</p>
+        </div>
+        <div class="step-visual">
+          <div class="visual-icon">⏱️</div>
+          <div class="visual-title">Video Duration</div>
+          <div class="visual-desc">35s minimum, 1+ minutes ideal</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REQUIREMENTS SECTION -->
+  <section class="requirements">
+    <h2>Royalty Requirements</h2>
+    <p style="text-align: center; max-width: 800px; margin: 0 auto 20px;">Follow these guidelines to ensure your content generates royalties</p>
+    
+    <div class="requirements-grid">
+      <div class="requirement-card">
+        <div class="requirement-icon">🎵</div>
+        <h3>Audio Volume</h3>
+        <p>Music must be at least <strong>15% of total audio mix</strong>. Too quiet and it won't be detected by our tracking systems.</p>
+      </div>
+      
+      <div class="requirement-card">
+        <div class="requirement-icon">🎬</div>
+        <h3>Video Length</h3>
+        <p>Videos must be <strong>minimum 35 seconds</strong>. For optimal earnings, aim for <strong>1+ minute</strong> content.</p>
+      </div>
+      
+      <div class="requirement-card">
+        <div class="requirement-icon">📊</div>
+        <h3>Content Quality</h3>
+        <p>High-quality, original content performs best. Avoid reused or repetitive content that may limit monetization.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLATFORMS SECTION -->
+  <section class="platforms-section">
+    <h2>Multi-Platform Support</h2>
+    <p style="text-align: center; max-width: 800px; margin: 0 auto 20px; color: rgba(255,255,255,0.9);">We track and collect royalties from all major platforms</p>
+    
+    <div class="platforms-grid">
+      <div class="platform-card">
+        <div class="platform-icon">▶️</div>
+        <h3>YouTube</h3>
+        <p>Our primary platform for royalty collection. Use our sounds in your videos, shorts, and live streams.</p>
+      </div>
+      
+      <div class="platform-card">
+        <div class="platform-icon">🎵</div>
+        <h3>TikTok</h3>
+        <p>Perfect for short-form content. Use our sounds in your TikTok videos and trending audio features.</p>
+      </div>
+      
+      <div class="platform-card">
+        <div class="platform-icon">📱</div>
+        <h3>Instagram Reels</h3>
+        <p>Ideal for vertical content. Add our music to your Reels for maximum engagement and royalties.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIAGRAM SECTION -->
+  <section class="diagram-section">
+    <h2>The Royalty Process</h2>
+    <p style="text-align: center; max-width: 800px; margin: 0 auto 20px;">Here's how your content generates income</p>
+    
+    <div class="diagram-container">
+      <div class="diagram">
+        <div class="diagram-step">
+          <div class="diagram-circle">1</div>
+          <h4>Create Content</h4>
+          <p>Use EverGreen sounds in your videos with proper audio levels</p>
+        </div>
+        
+        <div class="diagram-arrow">→</div>
+        
+        <div class="diagram-step">
+          <div class="diagram-circle">2</div>
+          <h4>Publish</h4>
+          <p>Upload to YouTube, TikTok, or Instagram with our music</p>
+        </div>
+        
+        <div class="diagram-arrow">→</div>
+        
+        <div class="diagram-step">
+          <div class="diagram-circle">3</div>
+          <h4>Track & Collect</h4>
+          <p>We monitor all platforms and collect your royalties</p>
+        </div>
+        
+        <div class="diagram-arrow">→</div>
+        
+        <div class="diagram-step">
+          <div class="diagram-circle">4</div>
+          <h4>Get Paid</h4>
+          <p>Receive 30% of all revenue in monthly payments</p>
+        </div>
+      </div>
+      
+      <div style="background: var(--light); padding: 20px; border-radius: 10px; margin-top: 30px;">
+        <h3 style="color: var(--navy); margin-bottom: 10px;">💰 Important Note</h3>
+        <p style="margin: 0; color: #666;">Your first payment takes 90 days as we collect from all platforms worldwide. After that, you'll receive monthly payments with full transparency in your dashboard.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIPS SECTION -->
+  <section class="tips-section">
+    <h2>Pro Tips for Maximum Earnings</h2>
+    <p style="text-align: center; max-width: 800px; margin: 0 auto 20px;">Boost your royalty income with these strategies</p>
+    
+    <div class="tips-grid">
+      <div class="tip-card">
+        <div class="tip-icon">🎯</div>
+        <h3>Consistent Usage</h3>
+        <p>Use EverGreen sounds in multiple videos per week. Consistent usage across your content increases your overall royalty potential.</p>
+      </div>
+      
+      <div class="tip-card">
+        <div class="tip-icon">📈</div>
+        <h3>Platform Diversity</h3>
+        <p>Cross-post your content to YouTube, TikTok, AND Instagram Reels. Each platform generates separate royalty streams.</p>
+      </div>
+      
+      <div class="tip-card">
+        <div class="tip-icon">🔄</div>
+        <h3>Content Series</h3>
+        <p>Create series or recurring content using the same EverGreen tracks. This builds audience recognition and consistent royalties.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ SECTION -->
+  <section class="faq-section">
+    <h2>Frequently Asked Questions</h2>
+    
+    <div class="faq-container">
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+          How long until I see my first royalty payment?
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Your first payment will arrive within 90 days of your first eligible content. This allows us to collect royalties from all platforms worldwide. After your first payment, you'll receive monthly payments.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+          Why does the audio need to be at least 15% volume?
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Content ID systems across platforms require the music to be clearly audible to properly detect and attribute royalties. Audio below 15% may not trigger detection, meaning you'd miss out on earnings.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+          Can I use EverGreen sounds on multiple platforms?
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Yes! We encourage cross-posting to YouTube, TikTok, Instagram Reels, and other platforms. Each platform generates separate royalty streams, maximizing your overall earnings.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+          What happens if my video is shorter than 35 seconds?
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Videos shorter than 35 seconds may not generate significant royalties due to platform limitations and content ID thresholds. For optimal earnings, aim for 1+ minute content whenever possible.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section class="cta-section">
+    <h2>Ready to Start Earning?</h2>
+    <p>Join thousands of creators who are already generating passive income from their content</p>
+    <div>
+      <a href="sign up.html" class="btn main" style="background: var(--navy); color: var(--white);">Join EverGreen Empire</a>
+      <a href="index.html#music" class="btn outline" style="border-color: var(--navy); color: var(--navy);">Browse Music Library</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Contact: <a href="mailto:support@evergreenempireltd.com">support@evergreenempireltd.com</a></p>
+    <p><a href="Terms of Service.html">Terms & Conditions</a> | <a href="Privacy policy.html">Privacy Policy</a> | <a href="Creator Agreement.html">Creator Agreement</a></p>
+    <p>© 2025 EverGreen Empire Ltd</p>
+  </footer>
+
+  <script>
+    // Mobile Menu Functions
+    function toggleMenu() {
+      const nav = document.getElementById('navMenu');
+      nav.classList.toggle('show');
+    }
+
+    function closeMenu() {
+      const nav = document.getElementById('navMenu');
+      nav.classList.remove('show');
+    }
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const nav = document.getElementById('navMenu');
+      const menuIcon = document.querySelector('.menu-icon');
+      
+      if (!nav.contains(event.target) && !menuIcon.contains(event.target) && nav.classList.contains('show')) {
+        closeMenu();
+      }
+    });
+
+    // FAQ Toggle Function
+    function toggleFAQ(element) {
+      const faqItem = element.parentElement;
+      faqItem.classList.toggle('active');
+    }
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+          closeMenu();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

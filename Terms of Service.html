@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EverGreen Empire – Terms & Conditions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #001f3f;
+      --gold: #d4af37;
+      --white: #ffffff;
+      --light: #f5f7fa;
+      --shadow: rgba(0, 31, 63, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: var(--white);
+      color: var(--navy);
+      overflow-x: hidden;
+    }
+
+    /* HEADER */
+    header {
+      background: var(--white);
+      box-shadow: 0 2px 10px var(--shadow);
+      padding: 18px 8%;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      font-family: "Montserrat", sans-serif;
+      font-size: 2em;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      flex: 1;
+      text-align: center;
+    }
+
+    /* NAV MENU */
+    nav {
+      position: relative;
+    }
+
+    .menu-icon {
+      display: none;
+      font-size: 28px;
+      color: var(--navy);
+      cursor: pointer;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--navy);
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    /* MOBILE MENU */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        background: var(--white);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 70%;
+        height: 100vh;
+        box-shadow: 3px 0 15px var(--shadow);
+        padding: 80px 20px;
+        text-align: left;
+        z-index: 999;
+        border-top-right-radius: 20px;
+      }
+
+      .nav-links a {
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+        font-size: 0.9em;
+      }
+
+      .nav-links.show {
+        display: flex;
+        animation: slideIn 0.3s ease forwards;
+      }
+
+      .menu-icon {
+        display: block;
+        position: absolute;
+        left: 8%;
+      }
+
+      @keyframes slideIn {
+        from { transform: translateX(-100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+    }
+
+    /* CONTENT SECTION */
+    section {
+      padding: 80px 8%;
+      text-align: left;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      font-family: "Montserrat", sans-serif;
+      font-size: 2em;
+      color: var(--navy);
+      margin-bottom: 20px;
+    }
+
+    h3 {
+      color: var(--gold);
+      font-size: 1.3em;
+      margin-top: 25px;
+      margin-bottom: 10px;
+    }
+
+    p, ul {
+      line-height: 1.6;
+      font-size: 1.1em;
+      margin-bottom: 15px;
+    }
+
+    ul {
+      margin-left: 20px;
+    }
+
+    ul li {
+      margin: 8px 0;
+    }
+
+    footer {
+      text-align: center;
+      background: var(--navy);
+      color: var(--white);
+      padding: 50px 15px;
+    }
+
+    footer a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="menu-icon" onclick="toggleMenu()">☰</div>
+    <div class="brand">EverGreen Empire</div>
+    <nav>
+      <div class="nav-links" id="navMenu">
+        <a href="index.html">Home</a>
+        <a href="#about">About</a>
+        <a href="#partnership">Partnership</a>
+        <a href="#login">Login</a>
+        <a href="#signup">Creator Signup</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- TERMS & CONDITIONS CONTENT -->
+  <section>
+    <h2>Terms & Conditions</h2>
+
+    <p>Welcome to <strong>EverGreen Empire</strong>. By accessing or using our platform, you agree to comply with and be bound by the following Terms & Conditions. Please read them carefully before joining the EverGreen Creator Program or using our services.</p>
+
+    <h3>1. Acceptance of Terms</h3>
+    <p>By signing up as a creator, you acknowledge that you have read, understood, and agree to be bound by these Terms and all applicable laws. If you do not agree, you may not use our platform or participate in the Creator Program.</p>
+
+    <h3>2. Eligibility</h3>
+    <p>To participate in the EverGreen Creator Program, you must be at least 18 years old or have parental consent. You must also own or manage an active YouTube, TikTok, or similar creator channel.</p>
+
+    <h3>3. Program Participation</h3>
+    <p>Once verified, you will receive music tracks from EverGreen Empire to use in your content. By using these tracks, you grant EverGreen Empire permission to collect, manage, and distribute royalties on your behalf.</p>
+
+    <h3>4. Royalties & Payment Terms</h3>
+    <p>Creators will receive <strong>30% of the total revenue</strong> generated from tracks used in their content.</p>
+    <ul>
+      <li><strong>First Royalty Cycle:</strong> Your first royalty payout will be processed within <strong>90 days</strong> from your first eligible use or revenue cycle.</li>
+      <li><strong>Subsequent Payments:</strong> After the first payout, royalties will be distributed on a <strong>monthly basis</strong>.</li>
+      <li>All payments are made via your selected payment method (Payoneer, TransferWise, or Local Bank).</li>
+    </ul>
+
+    <h3>5. Content Usage Guidelines</h3>
+    <ul>
+      <li>Creators must not modify, resell, or redistribute the provided music tracks outside the permitted use.</li>
+      <li>Each track is licensed for your verified channel only.</li>
+      <li>Unauthorized use or violation of licensing terms may result in removal from the program and forfeiture of royalties.</li>
+    </ul>
+
+    <h3>6. Termination</h3>
+    <p>EverGreen Empire reserves the right to suspend or terminate a creator’s account if there is evidence of fraud, misuse, or violation of these terms.</p>
+
+    <h3>7. Intellectual Property</h3>
+    <p>All content, designs, logos, and materials on the EverGreen platform are the property of EverGreen Empire Ltd. Creators may only use materials within the boundaries of their creator license agreement.</p>
+
+    <h3>8. Limitation of Liability</h3>
+    <p>EverGreen Empire shall not be held liable for any indirect or consequential losses arising from participation in the Creator Program, including delays in payment due to third-party platforms.</p>
+
+    <h3>9. Updates to Terms</h3>
+    <p>We may update these Terms from time to time to reflect changes in our platform or policies. The updated version will always be available on this page, and continued use of the service constitutes acceptance of the changes.</p>
+
+    <h3>10. Contact Information</h3>
+    <p>If you have any questions regarding these Terms, contact us at <a href="mailto:support@evergreenempireltd.com">support@evergreenempireltd.com</a>.</p>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="contact">
+    <p>Contact: <a href="mailto:support@evergreenempireltd.com">support@evergreenempireltd.com</a></p>
+    <p><a href="terms.html">Terms & Conditions</a> | <a href="privacy.html">Privacy Policy</a> | <a href="#">Creator Agreement</a></p>
+    <p>© 2025 EverGreen Empire Ltd</p>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const nav = document.getElementById('navMenu');
+      nav.classList.toggle('show');
+    }
+  </script>
+
+</body>
+</html>

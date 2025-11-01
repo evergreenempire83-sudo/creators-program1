@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EverGreen Empire – Creator Agreement</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #001f3f;
+      --gold: #d4af37;
+      --white: #ffffff;
+      --light: #f5f7fa;
+      --shadow: rgba(0, 31, 63, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: var(--white);
+      color: var(--navy);
+      overflow-x: hidden;
+    }
+
+    /* HEADER */
+    header {
+      background: var(--white);
+      box-shadow: 0 2px 10px var(--shadow);
+      padding: 18px 8%;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      font-family: "Montserrat", sans-serif;
+      font-size: 2em;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      flex: 1;
+      text-align: center;
+    }
+
+    /* NAV MENU */
+    nav {
+      position: relative;
+    }
+
+    .menu-icon {
+      display: none;
+      font-size: 28px;
+      color: var(--navy);
+      cursor: pointer;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--navy);
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    /* MOBILE MENU */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        background: var(--white);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 70%;
+        height: 100vh;
+        box-shadow: 3px 0 15px var(--shadow);
+        padding: 80px 20px;
+        text-align: left;
+        z-index: 999;
+        border-top-right-radius: 20px;
+      }
+
+      .nav-links a {
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+        font-size: 0.9em;
+      }
+
+      .nav-links.show {
+        display: flex;
+        animation: slideIn 0.3s ease forwards;
+      }
+
+      .menu-icon {
+        display: block;
+        position: absolute;
+        left: 8%;
+      }
+
+      @keyframes slideIn {
+        from { transform: translateX(-100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+    }
+
+    /* CONTENT SECTION */
+    section {
+      padding: 80px 8%;
+      text-align: left;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      font-family: "Montserrat", sans-serif;
+      font-size: 2em;
+      color: var(--navy);
+      margin-bottom: 20px;
+    }
+
+    h3 {
+      color: var(--gold);
+      font-size: 1.3em;
+      margin-top: 25px;
+      margin-bottom: 10px;
+    }
+
+    p, ul {
+      line-height: 1.6;
+      font-size: 1.1em;
+      margin-bottom: 15px;
+    }
+
+    ul {
+      margin-left: 20px;
+    }
+
+    ul li {
+      margin: 8px 0;
+    }
+
+    .important-note {
+      background: #fff8e1;
+      border-left: 4px solid var(--gold);
+      padding: 20px;
+      margin: 25px 0;
+      border-radius: 4px;
+    }
+
+    .important-note h4 {
+      color: var(--navy);
+      margin-bottom: 10px;
+      font-size: 1.2em;
+    }
+
+    footer {
+      text-align: center;
+      background: var(--navy);
+      color: var(--white);
+      padding: 50px 15px;
+    }
+
+    footer a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="menu-icon" onclick="toggleMenu()">☰</div>
+    <div class="brand">EverGreen Empire</div>
+    <nav>
+      <div class="nav-links" id="navMenu">
+        <a href="index.html">Home</a>
+        <a href="#about">About</a>
+        <a href="#partnership">Partnership</a>
+        <a href="login.html">Login</a>
+        <a href="sign up.html">Creator Signup</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- CREATOR AGREEMENT CONTENT -->
+  <section>
+    <h2>Creator Agreement</h2>
+
+    <p>This Creator Agreement ("Agreement") is entered into between <strong>EverGreen Empire Ltd</strong> ("Company") and the content creator ("Creator"). By signing up for the EverGreen Creator Program, you agree to the terms outlined below.</p>
+
+    <div class="important-note">
+      <h4>💰 Important Payment Information</h4>
+      <p><strong>Your first revenue payment takes 90 days to process</strong> because we collect royalties from multiple platforms worldwide, not just YouTube. While YouTube pays in 45 days, other platforms like Spotify, Apple Music, and TikTok take longer. We wait until we have collected all your royalties before distributing your 30% share.</p>
+      <p><strong>Your Success = Our Success:</strong> We earn when you earn. The more you use our sounds daily across all platforms, the more revenue we generate together. Consistent usage maximizes your earnings potential across our entire distribution network.</p>
+    </div>
+
+    <h3>1. Program Overview</h3>
+    <p>The EverGreen Creator Program provides creators with access to a curated music library for use in their content across <strong>all major platforms including YouTube, TikTok, Instagram, Spotify, and more</strong>. In exchange, creators receive 30% of the total revenue generated from tracks used in their eligible content across all platforms.</p>
+
+    <h3>2. Creator Eligibility</h3>
+    <ul>
+      <li>Creator must be at least 18 years of age or have parental/guardian consent.</li>
+      <li>Creator must own or manage active content channels on multiple platforms (YouTube, TikTok, Instagram, etc.)</li>
+      <li>Creator must comply with all platform-specific content guidelines and copyright policies.</li>
+      <li>Creator must provide accurate information during registration and maintain updated contact details.</li>
+    </ul>
+
+    <h3>3. Music Usage Rights & Strategy</h3>
+    <ul>
+      <li>EverGreen Empire grants Creator a non-exclusive, non-transferable license to use provided music tracks in content published on all verified platforms.</li>
+      <li><strong>Daily Usage Recommended:</strong> For optimal earnings, creators should incorporate EverGreen sounds into their daily content across multiple platforms.</li>
+      <li>Music may not be redistributed, sold, or used outside of approved content without explicit written permission.</li>
+      <li>Creator may not claim ownership of the music or register it with any content ID system.</li>
+      <li>All music remains the intellectual property of EverGreen Empire Ltd.</li>
+    </ul>
+
+    <h3>4. Multi-Platform Revenue Sharing & Payments</h3>
+    <ul>
+      <li>Creator will receive <strong>30% of net revenue</strong> generated from their content using EverGreen music <strong>across all platforms</strong>.</li>
+      <li><strong>First Payment Timeline:</strong> Initial payment will be processed within <strong>90 days</strong> of first eligible use to allow for global royalty collection from all platforms.</li>
+      <li><strong>Why 90 Days?</strong> While YouTube pays in 45 days, other platforms (Spotify, Apple Music, TikTok, etc.) have longer payment cycles. We consolidate all your earnings before distribution.</li>
+      <li>Subsequent payments will be made monthly after the initial payment cycle.</li>
+      <li>Minimum payout threshold: €50.</li>
+      <li>Payments will be made via Payoneer, TransferWise, or direct bank transfer.</li>
+    </ul>
+
+    <h3>5. Content Requirements & Platform Strategy</h3>
+    <ul>
+      <li>Creator must use EverGreen music in original content across multiple platforms to maximize revenue potential.</li>
+      <li>Content must comply with all applicable laws and platform guidelines.</li>
+      <li>Creator must not use EverGreen music in content that is defamatory, illegal, or promotes hate speech.</li>
+      <li>Creator is encouraged to use sounds consistently across platforms - your daily usage drives collective success.</li>
+    </ul>
+
+    <h3>6. Tracking & Reporting</h3>
+    <p>EverGreen Empire will track usage and revenue through our proprietary multi-platform system. Creators will have access to a dashboard showing real-time statistics, including views, estimated revenue across all platforms, and payment status.</p>
+
+    <h3>7. Term & Termination</h3>
+    <ul>
+      <li>This Agreement remains in effect until terminated by either party with 30 days written notice.</li>
+      <li>EverGreen Empire may terminate immediately for violation of terms.</li>
+      <li>Upon termination, Creator must cease using EverGreen music in new content.</li>
+      <li>Outstanding payments will be processed according to the payment schedule.</li>
+    </ul>
+
+    <h3>8. Partnership Mindset</h3>
+    <p>We operate on a partnership model: <strong>Your success is our success</strong>. The more you use our sounds daily across platforms, the more revenue we generate together. We're invested in your growth and provide resources to help you maximize your earnings across our entire distribution network.</p>
+
+    <h3>9. Confidentiality</h3>
+    <p>Creator agrees to keep confidential any proprietary information, including revenue details, business strategies, and unreleased music shared by EverGreen Empire.</p>
+
+    <h3>10. Indemnification</h3>
+    <p>Creator agrees to indemnify and hold harmless EverGreen Empire from any claims, damages, or losses arising from Creator's content or violation of this Agreement.</p>
+
+    <h3>11. Dispute Resolution</h3>
+    <p>Any disputes arising from this Agreement will be resolved through mediation before pursuing legal action. This Agreement is governed by the laws of the United Kingdom.</p>
+
+    <h3>12. Amendments</h3>
+    <p>EverGreen Empire reserves the right to modify this Agreement with 30 days notice to creators. Continued participation after changes constitutes acceptance of the modified terms.</p>
+
+    <h3>13. Acceptance</h3>
+    <p>By checking the agreement box during registration, Creator acknowledges they have read, understood, and agree to be bound by all terms of this Creator Agreement, including the 90-day initial payment period and multi-platform revenue model.</p>
+
+    <p><strong>Effective Date:</strong> January 1, 2025</p>
+    <p><strong>Last Updated:</strong> January 1, 2025</p>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="contact">
+    <p>Contact: <a href="mailto:support@evergreenempireltd.com">support@evergreenempireltd.com</a></p>
+    <p><a href="Terms of Service.html">Terms & Conditions</a> | <a href="Privacy policy.html">Privacy Policy</a> | <a href="Creator Agreement.html">Creator Agreement</a></p>
+    <p>© 2025 EverGreen Empire Ltd</p>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const nav = document.getElementById('navMenu');
+      nav.classList.toggle('show');
+    }
+  </script>
+
+</body>
+</html>
